@@ -61,23 +61,25 @@ program
     .action((name, options, command) => {
         logger.info('Starting API...')
         // create express app
-        const app = express();
-        app.use(bodyParser.json());
+        createConnection().then(async connection => {
+            const app = express();
+            app.use(bodyParser.json());
 
-        Routes.forEach(route => {
-            (app as any)[route.method](route.route, (req: Request, res: Response, next: Function) => {
-                const result = (new (route.controller as any))[route.action](req, res, next);
-                if (result instanceof Promise) {
-                    result.then(result => result !== null && result !== undefined ? res.send(result) : undefined);
+            Routes.forEach(route => {
+                (app as any)[route.method](route.route, (req: Request, res: Response, next: Function) => {
+                    const result = (new (route.controller as any))[route.action](req, res, next);
+                    if (result instanceof Promise) {
+                        result.then(result => result !== null && result !== undefined ? res.send(result) : undefined);
 
-                } else if (result !== null && result !== undefined) {
-                    res.json(result);
-                }
+                    } else if (result !== null && result !== undefined) {
+                        res.json(result);
+                    }
+                });
             });
-        });
 
-        app.listen(parseInt(options.port));
-        logger.info(`Express server has started on port ${options.port}.`);
+            app.listen(parseInt(options.port));
+            logger.info(`Express server has started on port ${options.port}.`);
+        }).catch(error => console.log(error));
     })
 
 if(!process.argv[2]) {

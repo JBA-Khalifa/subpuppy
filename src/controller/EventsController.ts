@@ -22,5 +22,14 @@ export class EventsController {
         let userToRemove = await this.eventsRepository.findOne(request.params.id);
         await this.eventsRepository.remove(userToRemove);
     }
-
+    
 }
+/*
+curl -X POST 'http://127.0.0.1:3000/api/scan/transfers' \
+  --header 'Content-Type: application/json' \
+  --header 'X-API-Key: YOUR_KEY' \
+  --data-raw '{
+    "row": 10,
+    "page": 1
+  }'
+*/

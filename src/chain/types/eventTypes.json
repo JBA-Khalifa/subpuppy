@@ -108,9 +108,21 @@
 		"module": "technicalCommittee",
 		"event": "Closed"
 	}, {
+		"type": "1000",
+		"module": "elections",
+		"event": "NewTerm"
+	}, {
 		"type": "1206",
 		"module": "treasury",
 		"event": "Deposit"
+	}, {
+		"type": "1300",
+		"module": "claims",
+		"event": "Claimed"
+	}, {
+		"type": "1401",
+		"module": "vesting",
+		"event": "VestingCompleted"
 	}, {
 		"type": "1500",
 		"module": "utility",

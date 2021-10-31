@@ -12,4 +12,14 @@ export const Routes = [{
     route: "/extrinsic/:id",
     controller: ExtrinsicsController,
     action: "one"
+}, {
+    method: "post",
+    route: "/api/scan/transfers",
+    controller: ExtrinsicsController,
+    action: "transfers"
+}, {
+    method: "post",
+    route: "api/scan/account/reward_slash",
+    controller: ExtrinsicsController,
+    action: "rewardSlash"
 }];
