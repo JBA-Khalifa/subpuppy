@@ -26,6 +26,7 @@ let updateAllowed = false;
  *  -t: to block height, default is latest block height
  *  -u: update allowed, default is false
  *  -p: API port
+ *  -l: update to latest block
  */
 
 program
