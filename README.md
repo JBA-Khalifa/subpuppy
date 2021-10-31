@@ -1,4 +1,5 @@
-## SubPuppy - an awesome tool for fetching chain data from substrate-based blockchain and store to mysql database, serve an API service for remote loading.
+# SubPuppy 
+## - an awesome tool for fetching chain data from substrate-based blockchain and store to mysql database, serve an API service for remote loading.
 
 Steps to run this project:
 
