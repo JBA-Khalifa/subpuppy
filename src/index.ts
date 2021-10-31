@@ -36,7 +36,7 @@ program
 
 program
     .command('fetch [options]')
-    .description('Fetch chain data')
+    .description('Fetch substrate-based blockchain data')
     .option('-f --from <blockHeight>', 'from block height')
     .option('-t --to <blockHeight>', 'to block height')
     .option('-u --update', 'update existed block data allowed', false)
