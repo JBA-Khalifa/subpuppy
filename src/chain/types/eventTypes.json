@@ -92,6 +92,22 @@
 		"module": "democracy",
 		"event": "Delegated"
 	}, {
+		"type": "0f01",
+		"module": "technicalCommittee",
+		"event": "Voted"
+	}, {
+		"type": "0f02",
+		"module": "technicalCommittee",
+		"event": "Approved"
+	}, {
+		"type": "0f04",
+		"module": "technicalCommittee",
+		"event": "Executed"
+	}, {
+		"type": "0f06",
+		"module": "technicalCommittee",
+		"event": "Closed"
+	}, {
 		"type": "1206",
 		"module": "treasury",
 		"event": "Deposit"
@@ -111,6 +127,10 @@
 		"type": "1e00",
 		"module": "xxNetwork",
 		"event": "RewardFromPool"
+	}, {
+		"type": "1e0c",
+		"module": "xxNetwork",
+		"event": "CmixHashesUpdated"
 	}, {
 		"type": "1e11",
 		"module": "xxNetwork",
