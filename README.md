@@ -9,10 +9,34 @@ Run `npm i` or `yarn` command
 Setup database settings inside `ormconfig.json` file
 
 ## Run
-Run `yarn start` command to get help
+Run `yarn start` command to get help as floowing:
+```
+Usage:  subpuppy fetch [options] or subpuppy api [options]
 
-## Command options
-Examples:
+Options:
+  -V, --version              output the version number
+  -h, --help                 display help for command
+
+Commands:
+  fetch [options] [options]  Fetch substrate-based blockchain data
+  api [options] [options]    Run API service
+  help [command]             display help for command
+```
+Run `yarn start help fetch` to get help for fetch:
+```
+Usage: index fetch [options] [options]
+
+Fetch substrate-based blockchain data
+
+Options:
+  -f --from <blockHeight>  from block height
+  -t --to <blockHeight>    to block height
+  -u --update              update existed block data allowed (default: false)
+  -l --latest              Fetch data until latest block
+  -h, --help               display help for command
+```
+
+## Examples:
 
 ### Fetch from block number 10000-20000
 ```
