@@ -54,7 +54,7 @@ export class ExtrinsicsController {
         for(let i = 0; i < data.length; i++) {
             const extrinsic: Extrinsics = data[i];
             const transfer = {
-                amount:             parseInt(extrinsic.params.split(',')[1]) / 1e9,
+                amount:             (parseInt(extrinsic.params.split(',')[1]) / 1e9).toString(),
                 block_num:          extrinsic.block_num,
                 block_timestamp:    extrinsic.block_timestamp,
                 extrinsic_index:    extrinsic.extrinsic_index,
