@@ -24,4 +24,10 @@ export const Routes = [
     route: "/api/scan/account/reward_slash",
     controller: EventsController,
     action: "rewardSlash"
-}];
+}, {
+    method: "post",
+    route: "/api/scan/extrinsics",
+    controller: ExtrinsicsController,
+    action: "getExtrinsics"
+}
+];

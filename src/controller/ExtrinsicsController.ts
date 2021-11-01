@@ -48,12 +48,110 @@ export class ExtrinsicsController {
         return this.parseTransfersData(out.concat(inn));
     }
 
+    /**
+    curl -X POST 'http://127.0.0.1:3030/api/scan/extrinsics' \
+  --header 'Content-Type: application/json' \
+  --header 'X-API-Key: YOUR_KEY' \
+  --data-raw '{
+    "row": 20,
+    "page": 0,
+    "module": "balances",
+    "address": "5DPQ6FSKVbdxFdai4x4keMKjpEiswR3a8MHhio7p67HFmr8K"
+  }'
+
+     * @param request 
+     * @param res 
+     * @param next 
+     * @returns 
+     */
+    async getExtrinsics(request: Request, res: Response, next: NextFunction) {
+        const req = request.body;
+        const row = req.row;
+        const page = req.page;
+        const signed = req.signed;
+        const address = req.address;
+        const module = req.module;
+        const call = req.call;
+        const block_num = req.block_num;
+
+        if(page === undefined || row === undefined) return null;
+
+        const where_address = address !== undefined ? `and account_id = '${address}'` : '';
+        const where_signed = signed !== undefined ? `and is_signed = ${signed}` : '';
+        const where_module = module !== undefined ? `and call_module = '${module}'` : '';
+        const where_call = call !== undefined ? `and call_module_function = '${call}'` : '';
+        const where_block_num = block_num !== undefined ? `and block_num = ${block_num}` : '';
+
+        const sql = `select * from extrinsics where id > 0 ${where_address} ${where_signed} ${where_module} ${where_call} ${where_block_num} order by block_num desc limit ${page}, ${row}`;
+        const result: Array<Extrinsics> = await this.extrinsicsRepository.query(sql);
+        return this.parseExtrinsics(result);
+    }
+
+    /**
+     * {
+    "code": 0,
+    "data": {
+        "count": 5223066,
+        "extrinsics": [
+            {
+                "account_display": null,
+                "account_id": "",
+                "account_index": "",
+                "block_num": 2028661,
+                "block_timestamp": 1602732522,
+                "call_module": "timestamp",
+                "call_module_function": "set",
+                "extrinsic_hash": "",
+                "extrinsic_index": "2028661-0",
+                "fee": "0",
+                "nonce": 0,
+                "params": "[{\"name\":\"now\",\"type\":\"Compact\\u003cMoment\\u003e\",\"value\":1602732522,\"value_raw\":\"\"}]",
+                "signature": "",
+                "success": true
+            }
+        ]
+    },
+    "message": "Success",
+    "generated_at": 1628587129
+}
+     */
+    parseExtrinsics(data: Array<Extrinsics>) {
+        let extrinsics = [];
+        for(let i = 0; i < data.length; i++) {
+            const extrinsic: Extrinsics = data[i];
+            extrinsics.push({
+                account_display:    extrinsic.account_id,
+                account_id:         extrinsic.account_id,
+                account_index:      '',
+                block_num:          extrinsic.block_num,
+                block_timestamp:    extrinsic.block_timestamp,
+                call_module:        extrinsic.call_module,
+                call_module_function: extrinsic.call_module_function,
+                extrinsic_hash:     extrinsic.extrinsic_hash,
+                extrinsic_index:    extrinsic.extrinsic_index,
+                fee:                extrinsic.fee.toString(),
+                nonce:              extrinsic.nonce,
+                params:             extrinsic.params,
+                signature:          extrinsic.signature,
+                success:            extrinsic.success == 1 ? true : false,
+            })
+        }
+        return {
+            code: 0,
+            message: "Success",
+            generated_at: Math.round((new Date()).getTime() / 1000),
+            data: {
+                count: extrinsics.length,
+                extrinsics,
+            }
+        }
+    }
+
     parseTransfersData(data: Array<Extrinsics>) {
-        // type = 0: out, type = 1: in
         let transfers = [];
         for(let i = 0; i < data.length; i++) {
             const extrinsic: Extrinsics = data[i];
-            const transfer = {
+            transfers.push({
                 amount:             (parseInt(extrinsic.params.split(',')[1]) / 1e9).toString(),
                 block_num:          extrinsic.block_num,
                 block_timestamp:    extrinsic.block_timestamp,
@@ -81,9 +179,9 @@ export class ExtrinsicsController {
                     identity: false,
                     parent: null,
                 }
-            }
-            transfers.push(transfer);
+            })
         }
+
         return {
             code: 0,
             message: "Success",
@@ -106,6 +204,7 @@ curl -X POST 'http://101.32.192.132:3030/api/scan/transfers' \
     "page": 0,
     "address": "5DPQ6FSKVbdxFdai4x4keMKjpEiswR3a8MHhio7p67HFmr8K"
   }'
+
 
 curl -X POST 'https://kusama.api.subscan.io/api/scan/transfers' \
   --header 'Content-Type: application/json' \
