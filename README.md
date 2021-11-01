@@ -49,11 +49,17 @@ yarn start fetch -f 10000 -t 20000 -u
 ```
 Default is passing without updating.
 
+### Fetch the lastest block data.
+```
+yarn start fetch -l
+```
+
 ### Start API service, set port 3000
 ```
 yarn start api -p 3000
 ```
 Default port is `3000`
+
 
 ### Log File
 located in `./info.log`
