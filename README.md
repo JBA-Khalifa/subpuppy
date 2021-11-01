@@ -56,7 +56,8 @@ yarn start fetch -l
 
 ### If you use pm2
 ```
-pm2 start yarn -n subpuppy1030000~1050000 -- run fetch -f 1030000 -t 1050000
+pm2 start run.sh -n subpuppy_auto // same as: yarn start fetch -l
+
 ```
 
 ### Start API service, set port 3000

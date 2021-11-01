@@ -178,7 +178,7 @@ async function saveChainData(chainData: ChainData, conn: Connection) {
 }
 
 async function getDBHeight(conn: Connection): Promise<number> {
-    const sql = "select * from blocks order by block_num limit 1";
+    const sql = "select * from blocks order by block_num desc limit 1";
     const record: Array<Blocks> = await conn.manager.query(sql);
     return record[0].block_num;
 }
