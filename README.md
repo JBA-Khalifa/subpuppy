@@ -6,7 +6,7 @@ Run `npm i` or `yarn` command
 
 ## 2. Database configuration
 
-Setup database settings inside `ormconfig.json` file
+Copy `ormconfig.json.sample` to `ormconfig.json`, configue mysql database.
 
 ## 3. Run
 Run `yarn start` command to get help as floowing:
