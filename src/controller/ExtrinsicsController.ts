@@ -51,12 +51,12 @@ export class ExtrinsicsController {
 
 
         return {
-            ...this.parseTransfersData(out, 0),
-            ...this.parseTransfersData(inn, 1)
+            ...this.parseTransfersData(out),
+            ...this.parseTransfersData(inn)
         }
     }
 
-    parseTransfersData(data: Array<Extrinsics>, type: number) {
+    parseTransfersData(data: Array<Extrinsics>) {
         // type = 0: out, type = 1: in
         let transfers = [];
         for(let i = 0; i < data.length; i++) {
@@ -67,9 +67,9 @@ export class ExtrinsicsController {
                 block_timestamp:    extrinsic.block_timestamp,
                 extrinsic_index:    extrinsic.extrinsic_index,
                 fee:                extrinsic.fee,
-                from:               type == 1 ? extrinsic.account_id : extrinsic.params.split(',')[0],
+                from:               extrinsic.account_id,
                 from_account_display: {
-                    address: type == 0 ? extrinsic.account_id : extrinsic.params.split(',')[0],
+                    address: extrinsic.account_id,
                     display: "",
                     judgements: null,
                     account_index: "",
@@ -80,9 +80,9 @@ export class ExtrinsicsController {
                 module:             extrinsic.call_module,
                 nonce:              extrinsic.nonce,
                 success:            extrinsic.success === 1,
-                to:                 type == 1 ? extrinsic.params.split(',')[0] : extrinsic.account_id,
+                to:                 extrinsic.params.split(',')[0],
                 to_account_display: {
-                    address: type == 0 ? extrinsic.params.split(',')[0] : extrinsic.account_id,
+                    address: extrinsic.params.split(',')[0],
                     display: "",
                     judgements: null,
                     account_index: "",
@@ -106,7 +106,7 @@ export class ExtrinsicsController {
 
 
 /*
-curl -X POST 'http://127.0.0.1:3000/api/scan/transfers' \
+curl -X POST 'http://101.32.192.132:3030/api/scan/transfers' \
   --header 'Content-Type: application/json' \
   --header 'X-API-Key: YOUR_KEY' \
   --data-raw '{
