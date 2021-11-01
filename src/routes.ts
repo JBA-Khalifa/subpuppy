@@ -21,7 +21,7 @@ export const Routes = [
     action: "transfers"
 }, {
     method: "post",
-    route: "/api/scan/reward_slash",
+    route: "/api/scan/account/reward_slash",
     controller: EventsController,
     action: "rewardSlash"
 }];
