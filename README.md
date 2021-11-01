@@ -58,6 +58,9 @@ yarn start fetch -l
 ```
 pm2 start run.sh -n subpuppy_auto // same as: yarn start fetch -l
 
+pm2 start run_fetch.sh 10000 11000 // same as yarn start fetch -f 10000 -t 11000
+
+pm2 start run_api.sh // same as: yarn start api -p 3030
 ```
 
 ### Start API service, set port 3000
