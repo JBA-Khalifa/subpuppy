@@ -52,16 +52,18 @@ export class EventsController {
             const eventModule: EventModule = this.getEventModule(event.type);
             const params = JSON.parse(event.params);
             const dat = {
-                event_index: event.event_index,
+                account: params[0],
+                amount: params[1].toString(),
                 block_num: event.block_num,
-                extrinsic_idx: event.extrinsic_idx, // 暂时不用
-                accountId: params[0],
-                amount: params[1] / 1e9,
-                module_id: eventModule.module,
+                // block_timestamp: event.block_timestamp,
                 event_id: eventModule.event,
-                params,
+                event_idx: event.event_idx,
+                event_index: event.event_index,
                 extrinsic_hash: event.extrinsic_hash, // 暂时不用
-                event_idx: event.event_idx
+                extrinsic_idx: event.extrinsic_idx, // 暂时不用
+                module_id: eventModule.module,
+                params,
+                stash: params[0],
             }
             events.push(dat);
         }
@@ -126,7 +128,7 @@ export class EventsController {
  */
 
 /*
-curl -X POST 'http://127.0.0.1:3000/api/scan/reward_slash' \
+curl -X POST 'http://127.0.0.1:3000/api/scan/account/reward_slash' \
   --header 'Content-Type: application/json' \
   --header 'X-API-Key: YOUR_KEY' \
   --data-raw '{
@@ -134,4 +136,14 @@ curl -X POST 'http://127.0.0.1:3000/api/scan/reward_slash' \
     "page": 1,
     "address": "5GNER3tsmKkv7SmMpKBeKynKgBr5Bf2iriS1pzPFUuH5jehR"
   }'
-*/
+
+curl -X POST 'https://kusama.api.subscan.io/api/scan/account/reward_slash' \
+  --header 'Content-Type: application/json' \
+  --header 'X-API-Key: YOUR_KEY' \
+  --data-raw '{
+    "row": 20,
+    "page": 0,
+    "address": "HNPmcMFUenVkonaVBzxknjjZ4uptXNirTamUEfCYp86o1af"
+  }'
+
+  */
