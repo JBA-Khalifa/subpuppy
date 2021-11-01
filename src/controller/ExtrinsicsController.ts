@@ -38,22 +38,14 @@ export class ExtrinsicsController {
         const fromBlock = from_block !== undefined ? `and block_num >= ${from_block}` : '';
         const toBlock = to_block !== undefined ? `and block_num <= ${to_block}` : '';
         let sql = `select * from extrinsics where call_module = 'balances' ${where} ${fromBlock} ${toBlock} order by block_num desc limit ${page}, ${row};`;
-        // console.log(sql);
         const out: Array<Extrinsics> = await this.extrinsicsRepository.query(sql);
-        // console.log(this.parseTransfersData(out, 1));
 
         // in
         where = address !== undefined ? `and INSTR(params, '${address}') > 0` : '';
         sql = `select * from extrinsics where call_module = 'balances' ${where} ${fromBlock} ${toBlock} order by block_num desc limit ${page}, ${row};`;
-        // console.log(sql);
         const inn = await this.extrinsicsRepository.query(sql);
-        // console.log(this.parseTransfersData(inn, 2));
 
-
-        return {
-            ...this.parseTransfersData(out),
-            ...this.parseTransfersData(inn)
-        }
+        return this.parseTransfersData(out.concat(inn));
     }
 
     parseTransfersData(data: Array<Extrinsics>) {
