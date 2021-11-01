@@ -1,14 +1,14 @@
 # SubPuppy 
 ### An awesome tool for fetching chain data from substrate-based blockchain to Mysql database, and serve an API service for remote loading.
 
-## Install
+## 1. Install
 Run `npm i` or `yarn` command
 
-## Database configuration
+## 2. Database configuration
 
 Setup database settings inside `ormconfig.json` file
 
-## Run
+## 3. Run
 Run `yarn start` command to get help as floowing:
 ```
 Usage:  subpuppy fetch [options] or subpuppy api [options]
@@ -36,7 +36,7 @@ Options:
   -h, --help               display help for command
 ```
 
-## Examples:
+## 4. Examples:
 
 ### Fetch from block number 10000-20000
 ```
@@ -54,21 +54,28 @@ Default is passing without updating.
 yarn start fetch -l
 ```
 
-### If you use pm2
-```
-pm2 start run.sh -n subpuppy_auto // same as: yarn start fetch -l
-
-pm2 start run_fetch.sh 10000 11000 // same as yarn start fetch -f 10000 -t 11000
-
-pm2 start run_api.sh // same as: yarn start api -p 3030
-```
-
 ### Start API service, set port 3000
 ```
 yarn start api -p 3000
 ```
 Default port is `3000`
 
+
+## 5. Use pm2
+### Fetch to the latest block
+```
+pm2 start run.sh -n subpuppy_auto // same as: yarn start fetch -l
+```
+
+### Fetch range from ... to ...
+```
+pm2 start run_fetch.sh -n fetch10000~12000 -- 10000 11000 // same as yarn start fetch -f 10000 -t 11000, name it fetch10000~12000
+```
+
+### Run api
+```
+pm2 start run_api.sh // same as: yarn start api -p 3030
+```
 
 ### Log File
 located in `./info.log`

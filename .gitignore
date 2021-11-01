@@ -6,3 +6,4 @@ tmp/
 temp/
 ormconfig.json
 info.log
+subpuppy.log
