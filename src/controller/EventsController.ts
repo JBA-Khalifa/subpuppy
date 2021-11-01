@@ -2,6 +2,7 @@ import {getRepository} from "typeorm";
 import {NextFunction, Request, Response} from "express";
 import {Events} from "../entity/Events";
 import fs = require('fs');
+import { Blocks } from "../entity/Blocks";
 const eventTypes = JSON.parse(fs.readFileSync('./src/chain/types/eventTypes.json').toString()).eventTypes;
 
 interface EventModule {
@@ -42,27 +43,35 @@ export class EventsController {
         const sql = `select * from events where type = '${type}' ${where} order by block_num limit ${page}, ${row}`;
         const result: Array<Events> = await this.eventsRepository.query(sql);
 
-        return this.parseRewardSlash(result);
+        return await this.parseRewardSlash(result);
     }
 
-    parseRewardSlash(data: Array<Events>) {
+    async parseRewardSlash(data: Array<Events>) {
         let events = [];
         for(let i = 0; i < data.length; i++) {
             const event: Events = data[i];
             const eventModule: EventModule = this.getEventModule(event.type);
             const params = JSON.parse(event.params);
+            const timestamp: Array<Blocks> = await this.eventsRepository.query(`SELECT * FROM blocks WHERE block_num = ${event.block_num} limit 1`);
+
             const dat = {
                 account: params[0],
                 amount: params[1].toString(),
                 block_num: event.block_num,
-                // block_timestamp: event.block_timestamp,
+                block_timestamp: timestamp[0].block_timestamp,
                 event_id: eventModule.event,
                 event_idx: event.event_idx,
                 event_index: event.event_index,
                 extrinsic_hash: event.extrinsic_hash, // 暂时不用
                 extrinsic_idx: event.extrinsic_idx, // 暂时不用
                 module_id: eventModule.module,
-                params,
+                params: JSON.stringify([{
+                    "type": "[U8; 32]", 
+                    "value": params[0],
+                }, {
+                    "type": "U128",
+                    "value": params[1].toString,
+                }]),
                 stash: params[0],
             }
             events.push(dat);
