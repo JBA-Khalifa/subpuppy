@@ -6,22 +6,22 @@ export class ExtrinsicsController {
 
     private extrinsicsRepository = getRepository(Extrinsics);
 
-    async all(request: Request, response: Response, next: NextFunction) {
-        return this.extrinsicsRepository.find();
-    }
+    // async all(request: Request, response: Response, next: NextFunction) {
+    //     return this.extrinsicsRepository.find();
+    // }
 
-    async one(request: Request, response: Response, next: NextFunction) {
-        return this.extrinsicsRepository.findOne(request.params.id);
-    }
+    // async one(request: Request, response: Response, next: NextFunction) {
+    //     return this.extrinsicsRepository.findOne(request.params.id);
+    // }
 
-    async save(request: Request, response: Response, next: NextFunction) {
-        return this.extrinsicsRepository.save(request.body);
-    }
+    // async save(request: Request, response: Response, next: NextFunction) {
+    //     return this.extrinsicsRepository.save(request.body);
+    // }
 
-    async remove(request: Request, response: Response, next: NextFunction) {
-        let userToRemove = await this.extrinsicsRepository.findOne(request.params.id);
-        await this.extrinsicsRepository.remove(userToRemove);
-    }
+    // async remove(request: Request, response: Response, next: NextFunction) {
+    //     let userToRemove = await this.extrinsicsRepository.findOne(request.params.id);
+    //     await this.extrinsicsRepository.remove(userToRemove);
+    // }
 
     async transfers(request: Request, response: Response, next: NextFunction) {
         const req = request.body;
@@ -35,14 +35,16 @@ export class ExtrinsicsController {
         
         // out
         let where = address !== undefined ? `and account_id = '${address}'` : '';
-        let sql = `select * from extrinsics where call_module = 'balances' ${where} order by block_num desc limit ${page}, ${row};`;
+        const fromBlock = from_block !== undefined ? `and block_num >= ${from_block}` : '';
+        const toBlock = to_block !== undefined ? `and block_num <= ${to_block}` : '';
+        let sql = `select * from extrinsics where call_module = 'balances' ${where} ${fromBlock} ${toBlock} order by block_num desc limit ${page}, ${row};`;
         // console.log(sql);
         const out: Array<Extrinsics> = await this.extrinsicsRepository.query(sql);
         // console.log(this.parseTransfersData(out, 1));
 
         // in
         where = address !== undefined ? `and INSTR(params, '${address}') > 0` : '';
-        sql = `select * from extrinsics where call_module = 'balances' ${where} order by block_num desc limit ${page}, ${row};`;
+        sql = `select * from extrinsics where call_module = 'balances' ${where} ${fromBlock} ${toBlock} order by block_num desc limit ${page}, ${row};`;
         // console.log(sql);
         const inn = await this.extrinsicsRepository.query(sql);
         // console.log(this.parseTransfersData(inn, 2));
@@ -51,14 +53,6 @@ export class ExtrinsicsController {
             out: this.parseTransfersData(out),
             in: this.parseTransfersData(inn)
         }
-    }
-
-    async rewardSlash(request: Request, response: Response, next: NextFunction) {
-        const req = request.body;
-        const row = req.row;
-        const page = req.page;
-        const address = req.address;
-        // ######
     }
 
     parseTransfersData(data: Array<Extrinsics>) {
@@ -94,6 +88,7 @@ export class ExtrinsicsController {
     }
 }
 
+
 /*
 curl -X POST 'http://127.0.0.1:3000/api/scan/transfers' \
   --header 'Content-Type: application/json' \
@@ -101,17 +96,8 @@ curl -X POST 'http://127.0.0.1:3000/api/scan/transfers' \
   --data-raw '{
     "row": 20,
     "page": 1,
-    "address": "5GNER3tsmKkv7SmMpKBeKynKgBr5Bf2iriS1pzPFUuH5jehR"
-  }'
-*/
-
-/*
-curl -X POST 'http://127.0.0.1:3000/api/scan/account/reward_slash' \
-  --header 'Content-Type: application/json' \
-  --header 'X-API-Key: YOUR_KEY' \
-  --data-raw '{
-    "row": 20,
-    "page": 1,
+    "from_block": 1000000,
+    "to_block": 1010000,
     "address": "5GNER3tsmKkv7SmMpKBeKynKgBr5Bf2iriS1pzPFUuH5jehR"
   }'
 */

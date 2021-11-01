@@ -24,6 +24,10 @@
 		"module": "balances",
 		"event": "Deposit"
 	}, {
+		"type": "0405",
+		"module": "balances",
+		"event": "Reserved"
+	}, {
 		"type": "0600",
 		"module": "staking",
 		"event": "EraPayout"
@@ -92,6 +96,22 @@
 		"module": "democracy",
 		"event": "Delegated"
 	}, {
+		"type": "0e01",
+		"module": "council",
+		"event": "Voted"
+	}, {
+		"type": "0e02",
+		"module": "council",
+		"event": "Approved"
+	}, {
+		"type": "0e04",
+		"module": "council",
+		"event": "Executed"
+	}, {
+		"type": "0e06",
+		"module": "council",
+		"event": "Closed"
+	}, {
 		"type": "0f01",
 		"module": "technicalCommittee",
 		"event": "Voted"
@@ -99,6 +119,10 @@
 		"type": "0f02",
 		"module": "technicalCommittee",
 		"event": "Approved"
+	}, {
+		"type": "0f03",
+		"module": "technicalCommittee",
+		"event": "Disapproved"
 	}, {
 		"type": "0f04",
 		"module": "technicalCommittee",
@@ -111,6 +135,18 @@
 		"type": "1000",
 		"module": "elections",
 		"event": "NewTerm"
+	}, {
+		"type": "1201",
+		"module": "treasury",
+		"event": "Spending"
+	}, {
+		"type": "1204",
+		"module": "treasury",
+		"event": "Burnt"
+	}, {
+		"type": "1205",
+		"module": "treasury",
+		"event": "Rollover"
 	}, {
 		"type": "1206",
 		"module": "treasury",
@@ -136,6 +172,18 @@
 		"module": "utility",
 		"event": "ItemCompleted"
 	}, {
+		"type": "1600",
+		"module": "identity",
+		"event": "IdentitySet"
+	}, {
+		"type": "1603",
+		"module": "identity",
+		"event": "JudgementRequested"
+	}, {
+		"type": "1700",
+		"module": "proxy",
+		"event": "ProxyExecuted"
+	}, {
 		"type": "1e00",
 		"module": "xxNetwork",
 		"event": "RewardFromPool"
@@ -143,6 +191,10 @@
 		"type": "1e0c",
 		"module": "xxNetwork",
 		"event": "CmixHashesUpdated"
+	}, {
+		"type": "1e0f",
+		"module": "xxNetwork",
+		"event": "CmixVariablesUpdated"
 	}, {
 		"type": "1e11",
 		"module": "xxNetwork",
