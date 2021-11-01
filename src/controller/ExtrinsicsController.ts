@@ -49,13 +49,15 @@ export class ExtrinsicsController {
         const inn = await this.extrinsicsRepository.query(sql);
         // console.log(this.parseTransfersData(inn, 2));
 
+
         return {
-            out: this.parseTransfersData(out),
-            in: this.parseTransfersData(inn)
+            ...this.parseTransfersData(out, 0),
+            ...this.parseTransfersData(inn, 1)
         }
     }
 
-    parseTransfersData(data: Array<Extrinsics>) {
+    parseTransfersData(data: Array<Extrinsics>, type: number) {
+        // type = 0: out, type = 1: in
         let transfers = [];
         for(let i = 0; i < data.length; i++) {
             const extrinsic: Extrinsics = data[i];
@@ -65,14 +67,28 @@ export class ExtrinsicsController {
                 block_timestamp:    extrinsic.block_timestamp,
                 extrinsic_index:    extrinsic.extrinsic_index,
                 fee:                extrinsic.fee,
-                from:               extrinsic.account_id,
-                from_account_display: {},
+                from:               type == 1 ? extrinsic.account_id : extrinsic.params.split(',')[0],
+                from_account_display: {
+                    address: type == 0 ? extrinsic.account_id : extrinsic.params.split(',')[0],
+                    display: "",
+                    judgements: null,
+                    account_index: "",
+                    identity: false,
+                    parent: null,
+                },
                 hash:               extrinsic.extrinsic_hash,
                 module:             extrinsic.call_module,
                 nonce:              extrinsic.nonce,
                 success:            extrinsic.success === 1,
-                to:                 extrinsic.params.split(',')[0],
-                to_account_display: {}
+                to:                 type == 1 ? extrinsic.params.split(',')[0] : extrinsic.account_id,
+                to_account_display: {
+                    address: type == 0 ? extrinsic.params.split(',')[0] : extrinsic.account_id,
+                    display: "",
+                    judgements: null,
+                    account_index: "",
+                    identity: false,
+                    parent: null,
+                }
             }
             transfers.push(transfer);
         }
@@ -95,12 +111,20 @@ curl -X POST 'http://127.0.0.1:3000/api/scan/transfers' \
   --header 'X-API-Key: YOUR_KEY' \
   --data-raw '{
     "row": 20,
-    "page": 1,
-    "from_block": 1000000,
-    "to_block": 1010000,
-    "address": "5GNER3tsmKkv7SmMpKBeKynKgBr5Bf2iriS1pzPFUuH5jehR"
+    "page": 0,
+    "address": "5DPQ6FSKVbdxFdai4x4keMKjpEiswR3a8MHhio7p67HFmr8K"
   }'
-*/
+
+curl -X POST 'https://kusama.api.subscan.io/api/scan/transfers' \
+  --header 'Content-Type: application/json' \
+  --header 'X-API-Key: YOUR_KEY' \
+  --data-raw '{
+    "row": 20,
+    "page": 0,
+    "address": "5G28DbXHGg4gwzLW1vExFtmoB5xNkHUc1AT3q23c2wYPiYNc"
+  }'
+
+  */
 
 /** 
  * {
