@@ -50,7 +50,6 @@ program
             if(options.latest) {
                 setInterval(async() => {
                     if(!fetchingData) {
-                        console.log("抓取最新数据...");
                         const latestHeight = await getLastestHeight();
                         const dbHeight = await getDBHeight(connection);
                         await fetchChainData(
@@ -68,7 +67,7 @@ program
                 );
                 exit(0);    
             }
-        }).catch(error => console.log(error));
+        }).catch(error => logger.error(error));
     })
 
 program
