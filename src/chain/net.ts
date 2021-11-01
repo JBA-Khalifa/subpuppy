@@ -1,7 +1,7 @@
 import { ApiPromise, WsProvider } from '@polkadot/api';
 import { definitions } from './types/xxnetwork';
 
-import { Block, BlockHash, EventRecord, SignedBlock } from '@polkadot/types/interfaces';
+import { Block, BlockHash, BlockNumber, EventRecord, SignedBlock } from '@polkadot/types/interfaces';
 import { SubBlock, SubEvent, SubExtrinsic } from './types/types';
 import { GenericExtrinsic, Vec } from '@polkadot/types';
 import { AnyTuple } from '@polkadot/types/types';
@@ -136,6 +136,10 @@ export async function fetchEvents(blockHeight: number, blockHash: BlockHash): Pr
   return eventArray;
 }
 
+export async function getLastestHeight(): Promise<number> {
+  return parseInt((await api.query.system.number()).toString());
+}
+
 function Uint8ArrayToString(array: Uint8Array): string {
   var dataString = '';
   for(let i = 0; i < array.length; i++) {
@@ -144,3 +148,4 @@ function Uint8ArrayToString(array: Uint8Array): string {
   }
   return dataString;
 }
+

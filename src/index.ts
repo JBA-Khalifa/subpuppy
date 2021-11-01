@@ -8,7 +8,7 @@ import { Routes } from "./routes";
 import { Blocks } from "./entity/Blocks";
 import { Extrinsics } from "./entity/Extrinsics";
 import { Events } from "./entity/Events";
-import { connect, fetchExtrinsics, fetchEvents, fetchBlocks, getBlockHash } from './chain/net';
+import { connect, fetchExtrinsics, fetchEvents, fetchBlocks, getBlockHash, getLastestHeight } from './chain/net';
 import { BlockHash } from '@polkadot/types/interfaces';
 import { ChainData, SubBlock, SubEvent, SubExtrinsic } from './chain/types/types';
 import { logger } from "./logger";
@@ -16,6 +16,7 @@ import { program } from "commander";
 import { exit } from "process";
 
 let updateAllowed = false;
+let fetchingData = false;
 
 /** Commanders: 
  *  fetch: start fetching service
@@ -45,12 +46,28 @@ program
         // console.log(options.from, options.to, options.update);
         updateAllowed = options.update;
         createConnection().then(async connection => {
-            await fetchChainData(
-                connection, 
-                parseInt(options.from),
-                parseInt(options.to)
-            );
-            exit(0);
+            await connect();
+            if(options.latest) {
+                setInterval(async() => {
+                    if(!fetchingData) {
+                        console.log("抓取最新数据...");
+                        const latestHeight = await getLastestHeight();
+                        const dbHeight = await getDBHeight(connection);
+                        await fetchChainData(
+                            connection,
+                            dbHeight + 1,
+                            latestHeight
+                        )
+                    }
+                }, 12000);
+            } else {
+                await fetchChainData(
+                    connection, 
+                    parseInt(options.from),
+                    parseInt(options.to)
+                );
+                exit(0);    
+            }
         }).catch(error => console.log(error));
     })
 
@@ -90,7 +107,7 @@ program.parse(process.argv);
 
 async function fetchChainData(conn: Connection, startBlockHeight: number, endBlockHeight: number) {
     if(endBlockHeight < startBlockHeight) return;
-    await connect();
+    fetchingData = true;
 
     for (let i = 0; i <= endBlockHeight - startBlockHeight; i++) {
         const h: number = startBlockHeight + i;
@@ -106,6 +123,7 @@ async function fetchChainData(conn: Connection, startBlockHeight: number, endBlo
             events
         }, conn);
     }
+    fetchingData = false;
 }
 
 async function checkIfExists(conn: Connection, height: number): Promise<boolean> {
@@ -158,4 +176,10 @@ async function saveChainData(chainData: ChainData, conn: Connection) {
     } catch (error) {
         logger.error(`ERROR #${chainData.block.block_num} ${error.message}`);
     }
+}
+
+async function getDBHeight(conn: Connection): Promise<number> {
+    const sql = "select * from blocks order by block_num limit 1";
+    const record: Array<Blocks> = await conn.manager.query(sql);
+    return record[0].block_num;
 }

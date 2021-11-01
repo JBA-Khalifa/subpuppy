@@ -23,7 +23,7 @@
       "winston": "^3.3.3"
    },
    "bin": {
-      "subpuppy": "src/index.ts"
+      "subpuppy": "./build/index.js"
    },
    "scripts": {
       "start": "ts-node src/index.ts"
