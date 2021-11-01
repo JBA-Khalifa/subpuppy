@@ -31,7 +31,7 @@ let updateAllowed = false;
 
 program
     .allowUnknownOption()
-    .version('0.1.2')
+    .version('0.1.3')
     .usage('subpuppy fetch [options] or subpuppy api [options]')
 
 program
