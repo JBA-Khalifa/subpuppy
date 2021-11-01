@@ -54,6 +54,11 @@ Default is passing without updating.
 yarn start fetch -l
 ```
 
+### If you use pm2
+```
+pm2 start yarn -n subpuppy1030000~1050000 -- run fetch -f 1030000 -t 1050000
+```
+
 ### Start API service, set port 3000
 ```
 yarn start api -p 3000
