@@ -70,7 +70,7 @@ export class EventsController {
                     "value": params[0],
                 }, {
                     "type": "U128",
-                    "value": params[1].toString,
+                    "value": params[1].toString(),
                 }]),
                 stash: params[0],
             }
