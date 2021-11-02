@@ -112,15 +112,17 @@ program
     .action((name, options, command) => {
         createConnection().then(async (conn) => {
             let count = 0;
-            for(let i = options.from; i <= options.to; i++) {
+            const from = parseInt(options.from);
+            const to = parseInt(options.to);
+            for(let i = from; i <= to; i++) {
                 const sql = `select * from blocks where block_num = ${i} limit 1`;
                 const result: Array<Blocks> = await conn.manager.query(sql);
                 if(result.length === 0) {
-                    count++; 
+                    count++;
                     log(`Checking block #${i}, found ${count} not synchronized`);
                 }
             }
-            console.log(`Total ${count} not synchronized.`)
+            console.log(`\nTotal ${count} (${(count / (to - from + 1)).toFixed(2)}%) not synchronized.`)
             exit();
         }).catch(error => console.log(error));
     })
