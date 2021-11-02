@@ -59,7 +59,7 @@ program
                         )
                         fetchingData = false;
                     }
-                }, 12000);
+                }, 8000);
             } else {
                 fetchingData = true;
                 await fetchChainData(
