@@ -122,7 +122,7 @@ program
                     log(`Checking block #${i}, found ${count} not synchronized`);
                 }
             }
-            console.log(`\nTotal ${count} (${(count / (to - from + 1)).toFixed(2)}%) not synchronized.`)
+            console.log(`\nTotal ${count} (${(count / (to - from + 1)).toFixed(4)}%) not synchronized.`)
             exit();
         }).catch(error => console.log(error));
     })
