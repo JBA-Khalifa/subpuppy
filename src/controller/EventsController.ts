@@ -16,7 +16,8 @@ export class EventsController {
       if(page === undefined || row === undefined || address === undefined) return null;
 
       const type = "0601"; // module is staking, event is Reward
-      const where = address !== undefined ? `and INSTR(params, '${address}') > 0` : '';
+      // const where = address !== undefined ? `and INSTR(params, '${address}') > 0` : '';
+      const where = address !== undefined ? `and match(params) against('${address}')` : '';
       const sql = `select * from events where type = '${type}' ${where} order by block_num desc limit ${page}, ${row}`;
       const result: Array<Events> = await this.eventsRepository.query(sql);
       if(result.length === 0) return null;
@@ -34,6 +35,7 @@ export class EventsController {
 
     if(page === undefined || row === undefined) return null;
 
+    // ###### 需要改成通过type查询
     const where_module = module !== undefined ? `and call_module = '${module}'` : '';
     const where_call = call !== undefined ? `and call_module_function = '${call}'` : '';
     const where_block_num = block_num !== undefined ? `and block_num = ${block_num}` : '';
@@ -68,7 +70,8 @@ export class EventsController {
     if(address === undefined) return null;
 
     const type = "0601"; // module is staking, event is Reward
-    const where_address = address !== undefined ? `and INSTR(params, '${address}') > 0` : '';
+    // const where_address = address !== undefined ? `and INSTR(params, '${address}') > 0` : '';
+    const where_address = address !== undefined ? `and match(params) against('${address}')` : '';
     const where_from = from_block !== undefined ? `and block_num >= ${from_block}` : '';
     const where_to = to_block !== undefined ? `and block_num <= ${to_block}` : '';
     const limit = row !== undefined && page !== undefined ? `limit ${page}, ${row}` : '';

@@ -23,11 +23,14 @@ export class ExtrinsicsController {
         const fromBlock = from_block !== undefined ? `and block_num >= ${from_block}` : '';
         const toBlock = to_block !== undefined ? `and block_num <= ${to_block}` : '';
         let sql = `select * from extrinsics where call_module = 'balances' ${where} ${fromBlock} ${toBlock} order by block_num desc limit ${page}, ${row};`;
+        console.log(sql);
         const out: Array<Extrinsics> = await this.extrinsicsRepository.query(sql);
 
-        // in
-        where = address !== undefined ? `and INSTR(params, '${address}') > 0` : '';
+        // in, must set params column as fulltext search to increase the speed
+        // where = address !== undefined ? `and INSTR(params, '${address}') > 0` : '';
+        where = address !== undefined ? `and match(params) against('${address}')` : '';
         sql = `select * from extrinsics where call_module = 'balances' ${where} ${fromBlock} ${toBlock} order by block_num desc limit ${page}, ${row};`;
+        console.log(sql);
         const inn: Array<Extrinsics> = await this.extrinsicsRepository.query(sql);
         if(out.length === 0 && inn.length === 0) return null;
         else {
