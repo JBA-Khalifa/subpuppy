@@ -132,8 +132,8 @@ export class ExtrinsicsController {
                 fee:                extrinsic.fee.toString(),
                 nonce:              extrinsic.nonce,
                 params:             JSON.stringify([{
-                                        "name": "targets", 
-                                        "type": "Vec<MultiAddress>", 
+                                        "name": extrinsic.call_module_function, 
+                                        "type": "Vec<sp_runtime:multiaddress:MultiAddress>", 
                                         "value": [ {
                                             "Id": extrinsic.params.substr(1, extrinsic.params.length - 2)
                                         }]
