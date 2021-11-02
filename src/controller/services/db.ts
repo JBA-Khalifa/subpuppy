@@ -90,8 +90,20 @@ async function saveChainData(chainData: ChainData, conn: Connection, updateAllow
 	}
 }
 
-export function keysort(key: string, sortType: boolean) {
-	return function(a, b) {
-		return sortType ? ~~(a[key] < b[key]) : ~~(a[key] > b[key]);
+export function keySort(key: string | number,sortType: boolean) {
+	return function(a,b){
+		if (typeof a[key]==='number' && typeof b[key]==='number') {
+				return sortType ? (b[key]-a[key]) : (a[key]-b[key]);
+		}
+		else if (typeof a[key]==='string' && typeof b[key]==='string') {
+				let x = a[key].toLowerCase();
+				let y = b[key].toLowerCase();
+				if (x < y) {return sortType ?1:-1;}
+				if (x > y) {return sortType ?-1:1;}
+				return 0;
+		}
+		else {
+				return 0;
+		}
 	}
 }
