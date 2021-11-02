@@ -16,7 +16,6 @@ export class EventsController {
       if(page === undefined || row === undefined || address === undefined) return null;
 
       const type = "0601"; // module is staking, event is Reward
-      // const where = address !== undefined ? `and INSTR(params, '${address}') > 0` : '';
       const where = address !== undefined ? `and match(params) against('${address}')` : '';
       const sql = `select * from events where type = '${type}' ${where} order by block_num desc limit ${page}, ${row}`;
       const result: Array<Events> = await this.eventsRepository.query(sql);
@@ -70,7 +69,6 @@ export class EventsController {
     if(address === undefined) return null;
 
     const type = "0601"; // module is staking, event is Reward
-    // const where_address = address !== undefined ? `and INSTR(params, '${address}') > 0` : '';
     const where_address = address !== undefined ? `and match(params) against('${address}')` : '';
     const where_from = from_block !== undefined ? `and block_num >= ${from_block}` : '';
     const where_to = to_block !== undefined ? `and block_num <= ${to_block}` : '';
