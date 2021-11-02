@@ -10,7 +10,7 @@ import { logger } from "./logger";
 import { program } from "commander";
 import { exit } from "process";
 import { fetchChainData, getDBHeight } from "./controller/services/db";
-import { Extrinsics } from "./entity/Extrinsics";
+import { Blocks } from "./entity/Blocks";
 
 let updateAllowed = false;
 let fetchingData = false;
@@ -102,21 +102,21 @@ program
         }).catch(error => console.log(error));
     })
 
-// 以下脚本用于修正blocks的timestamp数据出错
+// 以下脚本用于检测有多少块尚未同步
 program
-    .command('dev [options]')
+    .command('check [options]')
     .description('Repare data just for development')
     .option('-f --from <blockHeight>', 'from block height')
     .option('-t --to <blockHeight>', 'to block height')
     .action((name, options, command) => {
         createConnection().then(async (conn) => {
-            const sql = `select * from extrinsics where block_num >= ${options.from} and block_num <= ${options.to}`;
-            const result: Array<Extrinsics> = await conn.manager.query(sql);
-            for(let i = 0; i < result.length; i++) {
-                const sql2 = `update blocks set block_timestamp = ${result[i].block_timestamp} where block_num = ${result[i].block_num} and block_timestamp > 2000000000`;
-                const re = await conn.manager.query(sql2);
-                if(re.changedRows > 0) console.log(`Update #${result[i].block_num} timestamp to ${result[i].block_timestamp}`);
+            let count = 0;
+            for(let i = options.from; i <= options.to; i++) {
+                const sql = `select * from blocks where block_num = ${i} limit 1`;
+                const result: Array<Blocks> = await conn.manager.query(sql);
+                if(result.length === 0) count++; 
             }
+            console.log(`Total ${count} not synchronized.`)
             console.log("Done...");
             exit();
         }).catch(error => console.log(error));
