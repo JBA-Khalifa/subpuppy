@@ -117,7 +117,7 @@ program
                 const result: Array<Blocks> = await conn.manager.query(sql);
                 if(result.length === 0) {
                     count++; 
-                    log(`#${count}`);
+                    log(`Checking block #${i}, found ${count} not synchronized`);
                 }
             }
             console.log(`Total ${count} not synchronized.`)
