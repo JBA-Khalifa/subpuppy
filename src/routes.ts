@@ -3,31 +3,40 @@ import {EventsController} from "./controller/EventsController";
 import {ExtrinsicsController} from "./controller/ExtrinsicsController";
 
 export const Routes = [
-// {
-//     method: "get",
-//     route: "/block/:id",
-//     controller: BlocksController,
-//     action: "one"
-// }, {
-//     method: "get",
-//     route: "/extrinsic/:id",
-//     controller: ExtrinsicsController,
-//     action: "one"
-// }, 
 {
     method: "post",
     route: "/api/scan/transfers",
     controller: ExtrinsicsController,
-    action: "transfers"
+    action: "getTransfers"
 }, {
     method: "post",
     route: "/api/scan/account/reward_slash",
     controller: EventsController,
-    action: "rewardSlash"
+    action: "getRewardSlash"
 }, {
     method: "post",
     route: "/api/scan/extrinsics",
     controller: ExtrinsicsController,
     action: "getExtrinsics"
+}, {
+    method: "post",
+    route: "/api/now",
+    controller: BlocksController,
+    action: "getTimestamp"
+}, {
+    method: "post",
+    route: "/api/scan/blocks",
+    controller: BlocksController,
+    action: "getBlocks"
+}, {
+    method: "post",
+    route: "/api/scan/block",
+    controller: BlocksController,
+    action: "getBlock"
+}, {
+    method: "post",
+    route: "/api/scan/extrinsic",
+    controller: ExtrinsicsController,
+    action: "getExtrinsic"
 }
 ];

@@ -1,14 +1,7 @@
 import {getRepository} from "typeorm";
 import {NextFunction, Request, Response} from "express";
 import {Events} from "../entity/Events";
-import fs = require('fs');
-import { Blocks } from "../entity/Blocks";
-const eventTypes = JSON.parse(fs.readFileSync('./src/chain/types/eventTypes.json').toString()).eventTypes;
-
-interface EventModule {
-    module: string;
-    event: string;
-}
+import { parseEvent, parseEvents, parseRewardSlash } from "./services/parse";
 
 export class EventsController {
 
@@ -32,75 +25,55 @@ export class EventsController {
     // }
 
     
-    async rewardSlash(request: Request, response: Response, next: NextFunction) {
+    async getRewardSlash(request: Request, response: Response, next: NextFunction) {
         const req = request.body;
         const row = req.row;
         const page = req.page;
         const address = req.address;
         
+        if(page === undefined || row === undefined || address === undefined) return null;
+
         const type = "0601"; // module is staking, event is Reward
         const where = address !== undefined ? `and INSTR(params, '${address}') > 0` : '';
-        const sql = `select * from events where type = '${type}' ${where} order by block_num limit ${page}, ${row}`;
+        const sql = `select * from events where type = '${type}' ${where} order by block_num desc limit ${page}, ${row}`;
         const result: Array<Events> = await this.eventsRepository.query(sql);
-
-        return await this.parseRewardSlash(result);
+        if(result.length === 0) return null;
+        else return await parseRewardSlash(this.eventsRepository, result);
     }
 
-    async parseRewardSlash(data: Array<Events>) {
-        let events = [];
-        for(let i = 0; i < data.length; i++) {
-            const event: Events = data[i];
-            const eventModule: EventModule = this.getEventModule(event.type);
-            const params = JSON.parse(event.params);
-            const timestamp: Array<Blocks> = await this.eventsRepository.query(`SELECT * FROM blocks WHERE block_num = ${event.block_num} limit 1`);
+    async getEvents(request: Request, response: Response, next: NextFunction) {
+      const req = request.body;
+      const row = req.row;
+      const page = req.page;
+      const module = req.module;
+      const call = req.call;
+      const block_num = req.block_num;
+      const extrinsic_index = req.extrinsic_index;
 
-            const dat = {
-                account: params[0],
-                amount: params[1].toString(),
-                block_num: event.block_num,
-                block_timestamp: timestamp[0].block_timestamp,
-                event_id: eventModule.event,
-                event_idx: event.event_idx,
-                event_index: event.event_index,
-                extrinsic_hash: event.extrinsic_hash, // 暂时不用
-                extrinsic_idx: event.extrinsic_idx, // 暂时不用
-                module_id: eventModule.module,
-                params: JSON.stringify([{
-                    "type": "[U8; 32]", 
-                    "value": params[0],
-                }, {
-                    "type": "U128",
-                    "value": params[1].toString(),
-                }]),
-                stash: params[0],
-            }
-            events.push(dat);
-        }
-        return {
-            code: 0,
-            message: "Success",
-            generated_at: Math.round((new Date()).getTime() / 1000),
-            data: {
-                count: events.length,
-                list: events
-            }
-        }
+      if(page === undefined || row === undefined) return null;
+
+      const where_module = module !== undefined ? `and call_module = '${module}'` : '';
+      const where_call = call !== undefined ? `and call_module_function = '${call}'` : '';
+      const where_block_num = block_num !== undefined ? `and block_num = ${block_num}` : '';
+      const where_extrinsic_index = extrinsic_index !== undefined ? `and extrinsic_index = '${extrinsic_index}'`: '';
+
+      const sql = `select * from events where id > 0 ${where_module} ${where_call} ${where_block_num} ${where_extrinsic_index} order by block_num desc limit ${page}, ${row}`;
+      const result: Array<Events> = await this.eventsRepository.query(sql);
+      if(result.length === 0) return null;
+      else return parseEvents(result);
     }
 
-    getEventModule(type: string): EventModule {
-        let re: EventModule = { module: '', event: '' };
-        for(let t in eventTypes) {
-            if(eventTypes[t].type === type) {
-                re = {
-                    module: eventTypes[t].module,
-                    event: eventTypes[t].event,
-                }
-                break;   
-            }
-        }
-        return re;
-    }
+    async getEvent(request: Request, response: Response, next: NextFunction) {
+      const req = request.body;
+      const event_index = req.event_index;
 
+      if(event_index == undefined) return null;
+
+      const sql = `select * from events where event_index = '${event_index}' limit 1`;
+      const result: Array<Events> = await this.eventsRepository.query(sql);
+      if(result.length === 0) return null;
+      else return parseEvent(result[0]);
+    }
 }
 
 /*

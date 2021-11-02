@@ -44,7 +44,7 @@ export async function fetchBlocks(
     for(let i = 0; i < block.extrinsics.length; i++) extrinsics.push(block.extrinsics[i].toHex());
     const subBlock: SubBlock = new SubBlock(
       blockHeight,
-      parseInt(timestamp),
+      Math.round(parseInt(timestamp) / 1000), // ###### BUG, 需要写个脚本，将blocks表中的timestamp和extrinsics表中的timestamp同步
       blockHash.toString(),
       block.header.parentHash.toString(),
       block.header.stateRoot.toString(),
@@ -138,6 +138,10 @@ export async function fetchEvents(blockHeight: number, blockHash: BlockHash): Pr
 
 export async function getLastestHeight(): Promise<number> {
   return parseInt((await api.query.system.number()).toString());
+}
+
+export async function getBlockTimestamp(): Promise<number> {
+  return Math.round(parseInt((await api.query.timestamp.now()).toString()) / 1000);
 }
 
 function Uint8ArrayToString(array: Uint8Array): string {
