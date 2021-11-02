@@ -91,7 +91,7 @@ export class EventsController {
     const where_to = to_block !== undefined ? `and block_num <= ${to_block}` : '';
     const limit = row !== undefined && page !== undefined ? `limit ${page}, ${row}` : '';
 
-    const sql = `select * from events where type = '${type}' ${where_address} ${where_from} ${where_to} order by block_num desc ${limit}`;
+    const sql = `select * from events where type = '${type}' ${where_address} ${where_from} ${where_to} ${limit}`;
     const result: Array<Events> = await this.eventsRepository.query(sql);
     if(result.length === 0) return null;
     let sum = 0;
