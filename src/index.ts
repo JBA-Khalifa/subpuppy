@@ -11,6 +11,7 @@ import { program } from "commander";
 import { exit } from "process";
 import { fetchChainData, getDBHeight } from "./controller/services/db";
 import { Blocks } from "./entity/Blocks";
+const log = require('single-line-log').stdout;
 
 let updateAllowed = false;
 let fetchingData = false;
@@ -114,10 +115,12 @@ program
             for(let i = options.from; i <= options.to; i++) {
                 const sql = `select * from blocks where block_num = ${i} limit 1`;
                 const result: Array<Blocks> = await conn.manager.query(sql);
-                if(result.length === 0) count++; 
+                if(result.length === 0) {
+                    count++; 
+                    log(`#${count}`);
+                }
             }
             console.log(`Total ${count} not synchronized.`)
-            console.log("Done...");
             exit();
         }).catch(error => console.log(error));
     })
