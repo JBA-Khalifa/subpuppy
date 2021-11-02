@@ -2,7 +2,7 @@ import {getRepository} from "typeorm";
 import {NextFunction, Request, Response} from "express";
 import {Extrinsics} from "../entity/Extrinsics";
 import { parseExtrinsic, parseExtrinsics, parseTransfersData } from "./services/parse";
-import { keysort } from "./services/db";
+import { keySort } from "./services/db";
 
 export class ExtrinsicsController {
 
@@ -49,7 +49,7 @@ export class ExtrinsicsController {
         if(out.length === 0 && inn.length === 0) return null;
         else {
             const ttl:Array<Extrinsics> = out.concat(inn);
-            return parseTransfersData(ttl.sort(keysort('block_num', true)));
+            return parseTransfersData(ttl.sort(keySort('block_num', true)));
         }
     }
 
