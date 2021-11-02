@@ -90,8 +90,8 @@ async function saveChainData(chainData: ChainData, conn: Connection, updateAllow
 	}
 }
 
-export function keysort(key, sortType) {
-	return function(a,b){
-			return sortType ? ~~(a[key] < b[key]) : ~~(a[key] > b[key]);
+export function keysort(key: string, sortType: boolean) {
+	return function(a, b) {
+		return sortType ? ~~(a[key] < b[key]) : ~~(a[key] > b[key]);
 	}
 }
