@@ -69,7 +69,8 @@ program
                     updateAllowed
                 );
                 fetchingData = false;
-                exit(0);    
+                connection.close();
+                exit(0);
             }
         }).catch(error => logger.error(error));
     })
@@ -106,7 +107,7 @@ program
 // 以下脚本用于检测有多少块尚未同步
 program
     .command('check [options]')
-    .description('Repare data just for development')
+    .description('Check how many blocks not synchronized')
     .option('-f --from <blockHeight>', 'from block height')
     .option('-t --to <blockHeight>', 'to block height')
     .action((name, options, command) => {
@@ -121,6 +122,7 @@ program
                 log(`Checking block #${i}, found ${count} (${(count / (i - from + 1) * 100).toFixed(2)}%) not synchronized`);
             }
             console.log(`\nTotal ${count} (${(count / (to - from + 1) * 100).toFixed(2)}%) not synchronized.`)
+            conn.close();
             exit();
         }).catch(error => console.log(error));
     })
