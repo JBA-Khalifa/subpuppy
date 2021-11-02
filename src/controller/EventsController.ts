@@ -103,39 +103,6 @@ export class EventsController {
 
 }
 
-/**
- * {
-    "code": 0,
-    "message": "Success",
-    "generated_at": 1628587129,
-    "data": {
-        "count": 2,
-        "list": [
-            {
-                "event_index": "1780256-3",
-                "block_num": 1780256,
-                "extrinsic_idx": 3,
-                "module_id": "staking",
-                "event_id": "Reward",
-                "params": "[{\"type\":\"AccountId\",\"value\":\"0x6cf4b9ce8d60ca73a35f036cd58afbc52ecea4d691484586967ae1ed45a1c423\",\"valueRaw\":\"6cf4b9ce8d60ca73a35f036cd58afbc52ecea4d691484586967ae1ed45a1c423\"},{\"type\":\"Balance\",\"value\":\"129823168189\",\"valueRaw\":\"bd56103a1e0000000000000000000000\"}]",
-                "extrinsic_hash": "0x7484200dc749d42f6233186081a47fc977b45deec7f95468e0e68d277acf033a",
-                "event_idx": 5
-            },
-            {
-                "event_index": "1780256-3",
-                "block_num": 1780256,
-                "extrinsic_idx": 3,
-                "module_id": "staking",
-                "event_id": "Reward",
-                "params": "[{\"type\":\"AccountId\",\"value\":\"0x6cf4b9ce8d60ca73a35f036cd58afbc52ecea4d691484586967ae1ed45a1c423\",\"valueRaw\":\"6cf4b9ce8d60ca73a35f036cd58afbc52ecea4d691484586967ae1ed45a1c423\"},{\"type\":\"Balance\",\"value\":\"151198365253\",\"valueRaw\":\"45f61f34230000000000000000000000\"}]",
-                "extrinsic_hash": "0x7484200dc749d42f6233186081a47fc977b45deec7f95468e0e68d277acf033a",
-                "event_idx": 6
-            }
-        ]
-    }
-}
- */
-
 /*
 curl -X POST 'http://127.0.0.1:3000/api/scan/account/reward_slash' \
   --header 'Content-Type: application/json' \

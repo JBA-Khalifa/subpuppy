@@ -48,22 +48,6 @@ export class ExtrinsicsController {
         return this.parseTransfersData(out.concat(inn));
     }
 
-    /**
-    curl -X POST 'http://127.0.0.1:3030/api/scan/extrinsics' \
-  --header 'Content-Type: application/json' \
-  --header 'X-API-Key: YOUR_KEY' \
-  --data-raw '{
-    "row": 20,
-    "page": 0,
-    "module": "balances",
-    "address": "5DPQ6FSKVbdxFdai4x4keMKjpEiswR3a8MHhio7p67HFmr8K"
-  }'
-
-     * @param request 
-     * @param res 
-     * @param next 
-     * @returns 
-     */
     async getExtrinsics(request: Request, res: Response, next: NextFunction) {
         const req = request.body;
         const row = req.row;
@@ -87,34 +71,6 @@ export class ExtrinsicsController {
         return this.parseExtrinsics(result);
     }
 
-    /**
-     * {
-    "code": 0,
-    "data": {
-        "count": 5223066,
-        "extrinsics": [
-            {
-                "account_display": null,
-                "account_id": "",
-                "account_index": "",
-                "block_num": 2028661,
-                "block_timestamp": 1602732522,
-                "call_module": "timestamp",
-                "call_module_function": "set",
-                "extrinsic_hash": "",
-                "extrinsic_index": "2028661-0",
-                "fee": "0",
-                "nonce": 0,
-                "params":"[{\"name\":\"targets\",\"type\":\"Vec\\u003csp_runtime:multiaddress:MultiAddress\\u003e\",\"value\":[{\"Id\":\"0x766ebc87370f898dd73004e524f0019b36a511b071efcc5f685cd935cd6ac57a\"}]}]"
-                "signature": "",
-                "success": true
-            }
-        ]
-    },
-    "message": "Success",
-    "generated_at": 1628587129
-}
-     */
     parseExtrinsics(data: Array<Extrinsics>) {
         let extrinsics = [];
         for(let i = 0; i < data.length; i++) {
@@ -199,93 +155,3 @@ export class ExtrinsicsController {
         }
     }
 }
-
-
-/*
-curl -X POST 'http://101.32.192.132:3030/api/scan/transfers' \
-  --header 'Content-Type: application/json' \
-  --header 'X-API-Key: YOUR_KEY' \
-  --data-raw '{
-    "row": 20,
-    "page": 0,
-    "address": "5DPQ6FSKVbdxFdai4x4keMKjpEiswR3a8MHhio7p67HFmr8K"
-  }'
-
-
-curl -X POST 'https://kusama.api.subscan.io/api/scan/transfers' \
-  --header 'Content-Type: application/json' \
-  --header 'X-API-Key: YOUR_KEY' \
-  --data-raw '{
-    "row": 20,
-    "page": 0,
-    "address": "5G28DbXHGg4gwzLW1vExFtmoB5xNkHUc1AT3q23c2wYPiYNc"
-  }'
-
-  */
-
-/** 
- * {
-    id: 6321,
-    extrinsic_index: '1172010-1',
-    block_num: 1172010,
-    block_timestamp: 1635608442,
-    extrinsic_length: '',
-    version_info: '',
-    call_code: '0400',
-    call_module_function: 'transfer',
-    call_module: 'balances',
-    params: '5DHbeNM6317fuduTB2x6Z2P4AeWVghvF9Wc4EEX4xn5346AG,100000000000',
-    account_id: '5DPQ6FSKVbdxFdai4x4keMKjpEiswR3a8MHhio7p67HFmr8K',
-    signature: '0xbe48a03bab812076784ad97728136f5d4c312f99af48400d6cee464d506fc13d01939daa99524620055721e7f50a7214b6b841ac213cb4641a6ca949434a9b8c',
-    nonce: 7351,
-    era: '0x00',
-    extrinsic_hash: '0x0b797ed860927231a8821d8431530787bdda0ef09a60d8f58b7427dd576dc9cf',
-    is_signed: 1,
-    success: 1,
-    fee: '0'
-  }
-*/
-
-/**
- * {
-    "code": 0,
-    "data": {
-        "count": 207304,
-        "transfers": [
-            {
-                "amount": "1",
-                "block_num": 2028585,
-                "block_timestamp": 1602732066,
-                "extrinsic_index": "2028585-2",
-                "fee": "154000000",
-                "from": "1t8SpsoGckWBT7rdG7mpFdXxcT3hiQZEH3bGga6vi1wnm7h",
-                "from_account_display": {
-                    "account_index": "",
-                    "address": "1t8SpsoGckWBT7rdG7mpFdXxcT3hiQZEH3bGga6vi1wnm7h",
-                    "display": "",
-                    "identity": false,
-                    "judgements": null,
-                    "parent": "",
-                    "parent_display": ""
-                },
-                "hash": "0xdfcb85ab383b8cd30e2f8e76e99432e9961e59432b5d8f88712457f51988fe44",
-                "module": "balances",
-                "nonce": 8,
-                "success": true,
-                "to": "14i4t1FyBknoyEwoj3BXBZmboHT3aNK345XZ2YHGeRUYRkL6",
-                "to_account_display": {
-                    "account_index": "",
-                    "address": "14i4t1FyBknoyEwoj3BXBZmboHT3aNK345XZ2YHGeRUYRkL6",
-                    "display": "",
-                    "identity": false,
-                    "judgements": null,
-                    "parent": "",
-                    "parent_display": ""
-                }
-            }
-        ]
-    },
-    "message": "Success",
-    "generated_at": 1628587129
-}
-*/
