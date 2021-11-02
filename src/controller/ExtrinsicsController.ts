@@ -56,7 +56,8 @@ export class ExtrinsicsController {
         const where_call = call !== undefined ? `and call_module_function = '${call}'` : '';
         const where_block_num = block_num !== undefined ? `and block_num = ${block_num}` : '';
 
-        const sql = `select * from extrinsics where id > 0 ${where_address} ${where_signed} ${where_module} ${where_call} ${where_block_num} order by block_num desc limit ${page}, ${row}`;
+        const sql = `select * from extrinsics where true ${where_address} ${where_signed} ${where_module} ${where_call} ${where_block_num} order by block_num desc limit ${page}, ${row}`;
+        console.log(sql);
         const result: Array<Extrinsics> = await this.extrinsicsRepository.query(sql);
         if(result.length === 0) return null;
         else return parseExtrinsics(result);
