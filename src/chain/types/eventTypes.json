@@ -16,6 +16,10 @@
 		"module": "balances",
 		"event": "Endowed"
 	}, {
+		"type": "0401",
+		"module": "balances",
+		"event": "DustLost"
+	}, {
 		"type": "0402",
 		"module": "balances",
 		"event": "Transfer"
@@ -28,6 +32,10 @@
 		"module": "balances",
 		"event": "Reserved"
 	}, {
+		"type": "0406",
+		"module": "balances",
+		"event": "Unreserved"
+	}, {
 		"type": "0600",
 		"module": "staking",
 		"event": "EraPayout"
@@ -35,6 +43,10 @@
 		"type": "0601",
 		"module": "staking",
 		"event": "Reward"
+	}, {
+		"type": "0602",
+		"module": "staking",
+		"event": "Slash"
 	}, {
 		"type": "0604",
 		"module": "staking",
@@ -92,9 +104,33 @@
 		"module": "imOnline",
 		"event": "SomeOffline"
 	}, {
+		"type": "0d00",
+		"module": "democracy",
+		"event": "Proposed"
+	}, {
+		"type": "0d01",
+		"module": "democracy",
+		"event": "Tabled"
+	}, {
+		"type": "0d03",
+		"module": "democracy",
+		"event": "Started"
+	}, {
 		"type": "0d08",
 		"module": "democracy",
 		"event": "Delegated"
+	}, {
+		"type": "0d09",
+		"module": "democracy",
+		"event": "Undelegated"
+	}, {
+		"type": "0d0b",
+		"module": "democracy",
+		"event": "PreimageNoted"
+	}, {
+		"type": "0e00",
+		"module": "council",
+		"event": "Proposed"
 	}, {
 		"type": "0e01",
 		"module": "council",
@@ -136,6 +172,14 @@
 		"module": "elections",
 		"event": "NewTerm"
 	}, {
+		"type": "1004",
+		"module": "elections",
+		"event": "Renounced"
+	}, {
+		"type": "1005",
+		"module": "elections",
+		"event": "CandidateSlashed"
+	}, {
 		"type": "1201",
 		"module": "treasury",
 		"event": "Spending"
@@ -155,6 +199,10 @@
 		"type": "1300",
 		"module": "claims",
 		"event": "Claimed"
+	}, {
+		"type": "1400",
+		"module": "vesting",
+		"event": "VestingUpdated"
 	}, {
 		"type": "1401",
 		"module": "vesting",
@@ -176,6 +224,10 @@
 		"module": "identity",
 		"event": "IdentitySet"
 	}, {
+		"type": "1601",
+		"module": "identity",
+		"event": "IdentityCleared"
+	}, {
 		"type": "1603",
 		"module": "identity",
 		"event": "JudgementRequested"
@@ -184,9 +236,17 @@
 		"module": "proxy",
 		"event": "ProxyExecuted"
 	}, {
+		"type": "1a00",
+		"module": "bounties",
+		"event": "BountyProposed"
+	}, {
 		"type": "1e00",
 		"module": "xxNetwork",
 		"event": "RewardFromPool"
+	}, {
+		"type": "1e06",
+		"module": "xxNetwork",
+		"event": "PayoutFromCustody"
 	}, {
 		"type": "1e0c",
 		"module": "xxNetwork",
