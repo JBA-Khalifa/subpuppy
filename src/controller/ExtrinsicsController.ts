@@ -2,6 +2,7 @@ import {getRepository} from "typeorm";
 import {NextFunction, Request, Response} from "express";
 import {Extrinsics} from "../entity/Extrinsics";
 import { parseExtrinsic, parseExtrinsics, parseTransfersData } from "./services/parse";
+import { keysort } from "./services/db";
 
 export class ExtrinsicsController {
 
@@ -46,7 +47,10 @@ export class ExtrinsicsController {
         sql = `select * from extrinsics where call_module = 'balances' ${where} ${fromBlock} ${toBlock} order by block_num desc limit ${page}, ${row};`;
         const inn: Array<Extrinsics> = await this.extrinsicsRepository.query(sql);
         if(out.length === 0 && inn.length === 0) return null;
-        else return parseTransfersData(out.concat(inn));
+        else {
+            const ttl:Array<Extrinsics> = out.concat(inn);
+            return parseTransfersData(ttl.sort(keysort('block_num', true)));
+        }
     }
 
     async getExtrinsics(request: Request, res: Response, next: NextFunction) {

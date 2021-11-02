@@ -89,3 +89,9 @@ async function saveChainData(chainData: ChainData, conn: Connection, updateAllow
 			logger.error(`ERROR #${chainData.block.block_num} ${error.message}`);
 	}
 }
+
+export function keysort(key, sortType) {
+	return function(a,b){
+			return sortType ? ~~(a[key] < b[key]) : ~~(a[key] > b[key]);
+	}
+}
