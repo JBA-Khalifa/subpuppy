@@ -105,7 +105,7 @@ export class ExtrinsicsController {
                 "extrinsic_index": "2028661-0",
                 "fee": "0",
                 "nonce": 0,
-                "params": "[{\"name\":\"now\",\"type\":\"Compact\\u003cMoment\\u003e\",\"value\":1602732522,\"value_raw\":\"\"}]",
+                "params":"[{\"name\":\"targets\",\"type\":\"Vec\\u003csp_runtime:multiaddress:MultiAddress\\u003e\",\"value\":[{\"Id\":\"0x766ebc87370f898dd73004e524f0019b36a511b071efcc5f685cd935cd6ac57a\"}]}]"
                 "signature": "",
                 "success": true
             }
@@ -131,7 +131,13 @@ export class ExtrinsicsController {
                 extrinsic_index:    extrinsic.extrinsic_index,
                 fee:                extrinsic.fee.toString(),
                 nonce:              extrinsic.nonce,
-                params:             extrinsic.params,
+                params:             JSON.stringify([{
+                                        "name": "targets", 
+                                        "type": "Vec<MultiAddress>", 
+                                        "value": [ {
+                                            "Id": extrinsic.params.substr(1, extrinsic.params.length - 2)
+                                        }]
+                                    }]),
                 signature:          extrinsic.signature,
                 success:            extrinsic.success == 1 ? true : false,
             })
