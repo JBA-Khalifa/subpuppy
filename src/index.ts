@@ -118,7 +118,7 @@ program
                 const sql = `select * from blocks where block_num = ${i} limit 1`;
                 const result: Array<Blocks> = await conn.manager.query(sql);
                 if(result.length === 0) count++;
-                log(`Checking block #${i}, found ${count} (${(count / (to - from + 1)).toFixed(4)}%) not synchronized`);
+                log(`Checking block #${i}, found ${count} (${(count / (i - from + 1)).toFixed(4)}%) not synchronized`);
             }
             console.log(`\nTotal ${count} (${(count / (to - from + 1)).toFixed(4)}%) not synchronized.`)
             exit();
