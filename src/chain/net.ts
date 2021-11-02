@@ -44,7 +44,7 @@ export async function fetchBlocks(
     for(let i = 0; i < block.extrinsics.length; i++) extrinsics.push(block.extrinsics[i].toHex());
     const subBlock: SubBlock = new SubBlock(
       blockHeight,
-      Math.round(parseInt(timestamp) / 1000), // ###### BUG, 需要写个脚本，将blocks表中的timestamp和extrinsics表中的timestamp同步
+      Math.round(parseInt(timestamp) / 1000),
       blockHash.toString(),
       block.header.parentHash.toString(),
       block.header.stateRoot.toString(),
@@ -122,8 +122,8 @@ export async function fetchEvents(blockHeight: number, blockHash: BlockHash): Pr
         blockHeight,
         0,
         eventRecord.event.index.toString().substr(2, 4),
-        '', // module_id 暂时为空，用type
-        '',  // event_id 设为空，用type
+        '', // TODO module_id 暂时为空，用type
+        '',  // TODO event_id 设为空，用type
         eventRecord.event.data.toString(),
         '', // extrinsic_hash 为空
         i

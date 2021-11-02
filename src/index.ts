@@ -102,6 +102,7 @@ program
         }).catch(error => console.log(error));
     })
 
+// 以下脚本用于修正blocks的timestamp数据出错
 program
     .command('dev [options]')
     .description('Repare data just for development')

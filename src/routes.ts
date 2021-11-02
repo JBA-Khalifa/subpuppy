@@ -38,5 +38,10 @@ export const Routes = [
     route: "/api/scan/extrinsic",
     controller: ExtrinsicsController,
     action: "getExtrinsic"
+}, {
+    method: "post",
+    route: "/api/scan/staking_history",
+    controller: EventsController,
+    action: "getStakingHistory"
 }
 ];

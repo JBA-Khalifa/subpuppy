@@ -5,75 +5,110 @@ import { parseEvent, parseEvents, parseRewardSlash } from "./services/parse";
 
 export class EventsController {
 
-    private eventsRepository = getRepository(Events);
+  private eventsRepository = getRepository(Events);
 
-    // async all(request: Request, response: Response, next: NextFunction) {
-    //     return this.eventsRepository.find();
-    // }
+  // async all(request: Request, response: Response, next: NextFunction) {
+  //     return this.eventsRepository.find();
+  // }
 
-    // async one(request: Request, response: Response, next: NextFunction) {
-    //     return this.eventsRepository.findOne(request.params.id);
-    // }
+  // async one(request: Request, response: Response, next: NextFunction) {
+  //     return this.eventsRepository.findOne(request.params.id);
+  // }
 
-    // async save(request: Request, response: Response, next: NextFunction) {
-    //     return this.eventsRepository.save(request.body);
-    // }
+  // async save(request: Request, response: Response, next: NextFunction) {
+  //     return this.eventsRepository.save(request.body);
+  // }
 
-    // async remove(request: Request, response: Response, next: NextFunction) {
-    //     let userToRemove = await this.eventsRepository.findOne(request.params.id);
-    //     await this.eventsRepository.remove(userToRemove);
-    // }
+  // async remove(request: Request, response: Response, next: NextFunction) {
+  //     let userToRemove = await this.eventsRepository.findOne(request.params.id);
+  //     await this.eventsRepository.remove(userToRemove);
+  // }
 
-    
-    async getRewardSlash(request: Request, response: Response, next: NextFunction) {
-        const req = request.body;
-        const row = req.row;
-        const page = req.page;
-        const address = req.address;
-        
-        if(page === undefined || row === undefined || address === undefined) return null;
-
-        const type = "0601"; // module is staking, event is Reward
-        const where = address !== undefined ? `and INSTR(params, '${address}') > 0` : '';
-        const sql = `select * from events where type = '${type}' ${where} order by block_num desc limit ${page}, ${row}`;
-        const result: Array<Events> = await this.eventsRepository.query(sql);
-        if(result.length === 0) return null;
-        else return await parseRewardSlash(this.eventsRepository, result);
-    }
-
-    async getEvents(request: Request, response: Response, next: NextFunction) {
+  
+  async getRewardSlash(request: Request, response: Response, next: NextFunction) {
       const req = request.body;
       const row = req.row;
       const page = req.page;
-      const module = req.module;
-      const call = req.call;
-      const block_num = req.block_num;
-      const extrinsic_index = req.extrinsic_index;
+      const address = req.address;
+      
+      if(page === undefined || row === undefined || address === undefined) return null;
 
-      if(page === undefined || row === undefined) return null;
-
-      const where_module = module !== undefined ? `and call_module = '${module}'` : '';
-      const where_call = call !== undefined ? `and call_module_function = '${call}'` : '';
-      const where_block_num = block_num !== undefined ? `and block_num = ${block_num}` : '';
-      const where_extrinsic_index = extrinsic_index !== undefined ? `and extrinsic_index = '${extrinsic_index}'`: '';
-
-      const sql = `select * from events where id > 0 ${where_module} ${where_call} ${where_block_num} ${where_extrinsic_index} order by block_num desc limit ${page}, ${row}`;
+      const type = "0601"; // module is staking, event is Reward
+      const where = address !== undefined ? `and INSTR(params, '${address}') > 0` : '';
+      const sql = `select * from events where type = '${type}' ${where} order by block_num desc limit ${page}, ${row}`;
       const result: Array<Events> = await this.eventsRepository.query(sql);
       if(result.length === 0) return null;
-      else return parseEvents(result);
+      else return await parseRewardSlash(this.eventsRepository, result);
+  }
+
+  async getEvents(request: Request, response: Response, next: NextFunction) {
+    const req = request.body;
+    const row = req.row;
+    const page = req.page;
+    const module = req.module;
+    const call = req.call;
+    const block_num = req.block_num;
+    const extrinsic_index = req.extrinsic_index;
+
+    if(page === undefined || row === undefined) return null;
+
+    const where_module = module !== undefined ? `and call_module = '${module}'` : '';
+    const where_call = call !== undefined ? `and call_module_function = '${call}'` : '';
+    const where_block_num = block_num !== undefined ? `and block_num = ${block_num}` : '';
+    const where_extrinsic_index = extrinsic_index !== undefined ? `and extrinsic_index = '${extrinsic_index}'`: '';
+
+    const sql = `select * from events where id > 0 ${where_module} ${where_call} ${where_block_num} ${where_extrinsic_index} order by block_num desc limit ${page}, ${row}`;
+    const result: Array<Events> = await this.eventsRepository.query(sql);
+    if(result.length === 0) return null;
+    else return parseEvents(result);
+  }
+
+  async getEvent(request: Request, response: Response, next: NextFunction) {
+    const req = request.body;
+    const event_index = req.event_index;
+
+    if(event_index == undefined) return null;
+
+    const sql = `select * from events where event_index = '${event_index}' limit 1`;
+    const result: Array<Events> = await this.eventsRepository.query(sql);
+    if(result.length === 0) return null;
+    else return parseEvent(result[0]);
+  }
+
+  async getStakingHistory(request: Request, response: Response, next: NextFunction) {
+    const req = request.body;
+    const row = req.row;
+    const page = req.page;
+    const address = req.address;
+    const from_block = req.from_block;
+    const to_block = req.to_block;
+
+    if(address === undefined) return null;
+
+    const type = "0601"; // module is staking, event is Reward
+    const where_address = address !== undefined ? `and INSTR(params, '${address}') > 0` : '';
+    const where_from = from_block !== undefined ? `and block_num >= ${from_block}` : '';
+    const where_to = to_block !== undefined ? `and block_num <= ${to_block}` : '';
+    const limit = row !== undefined && page !== undefined ? `limit ${page}, ${row}` : '';
+
+    const sql = `select * from events where type = '${type}' ${where_address} ${where_from} ${where_to} order by block_num desc ${limit}`;
+    const result: Array<Events> = await this.eventsRepository.query(sql);
+    if(result.length === 0) return null;
+    let sum = 0;
+    for(let i = 0; i < result.length; i++) {
+      const reward = (JSON.parse(result[i].params))[1];
+      sum += reward;
     }
 
-    async getEvent(request: Request, response: Response, next: NextFunction) {
-      const req = request.body;
-      const event_index = req.event_index;
-
-      if(event_index == undefined) return null;
-
-      const sql = `select * from events where event_index = '${event_index}' limit 1`;
-      const result: Array<Events> = await this.eventsRepository.query(sql);
-      if(result.length === 0) return null;
-      else return parseEvent(result[0]);
+    return {
+      code: 0,
+      message: "Success",
+      generated_at: Math.round((new Date()).getTime() / 1000),
+      data: {
+        sum
+      }
     }
+  }
 }
 
 /*

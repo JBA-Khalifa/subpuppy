@@ -20,8 +20,8 @@ export async function parseRewardSlash(repo: Repository<Events> ,data: Array<Eve
 					event_id: eventModule.event,
 					event_idx: event.event_idx,
 					event_index: event.event_index,
-					extrinsic_hash: event.extrinsic_hash, // 暂时不用
-					extrinsic_idx: event.extrinsic_idx, // 暂时不用
+					extrinsic_hash: event.extrinsic_hash, // TODO 暂时不用
+					extrinsic_idx: event.extrinsic_idx, // TODO 暂时不用
 					module_id: eventModule.module,
 					params: JSON.stringify([{
 							"type": "[U8; 32]", 
