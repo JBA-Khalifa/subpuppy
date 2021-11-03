@@ -23,13 +23,11 @@ export class ExtrinsicsController {
         const fromBlock = from_block !== undefined ? `and block_num >= ${from_block}` : '';
         const toBlock = to_block !== undefined ? `and block_num <= ${to_block}` : '';
         let sql = `select * from extrinsics where call_module = 'balances' ${where} ${fromBlock} ${toBlock} order by block_num desc limit ${page}, ${row};`;
-        console.log(sql);
         const out: Array<Extrinsics> = await this.extrinsicsRepository.query(sql);
 
         // in, must set params column as fulltext search to increase the speed
         where = address !== undefined ? `and match(params) against('${address}')` : '';
         sql = `select * from extrinsics where call_module = 'balances' ${where} ${fromBlock} ${toBlock} order by block_num desc limit ${page}, ${row};`;
-        console.log(sql);
         const inn: Array<Extrinsics> = await this.extrinsicsRepository.query(sql);
         if(out.length === 0 && inn.length === 0) return nullObject;
         else {
@@ -57,7 +55,6 @@ export class ExtrinsicsController {
         const where_block_num = block_num !== undefined ? `and block_num = ${block_num}` : '';
 
         const sql = `select * from extrinsics where true ${where_address} ${where_signed} ${where_module} ${where_call} ${where_block_num} order by block_num desc limit ${page}, ${row}`;
-        console.log(sql);
         const result: Array<Extrinsics> = await this.extrinsicsRepository.query(sql);
         if(result.length === 0) return nullObject;
         else return parseExtrinsics(result);

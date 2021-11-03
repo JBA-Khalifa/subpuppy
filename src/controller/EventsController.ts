@@ -75,7 +75,6 @@ export class EventsController {
     const limit = row !== undefined && page !== undefined ? `limit ${page}, ${row}` : '';
 
     const sql = `select * from events where type = '${type}' ${where_address} ${where_from} ${where_to} ${limit}`;
-    console.log(sql);
     const result: Array<Events> = await this.eventsRepository.query(sql);
     if(result.length === 0) return nullObject;
     let sum = 0;

@@ -41,7 +41,6 @@ program
     .option('-u --update', 'update existed block data allowed', false)
     .option('-l --latest', 'Fetch data until latest block')
     .action((name, options, command) => {
-        // console.log(options.from, options.to, options.update);
         updateAllowed = options.update;
         createConnection().then(async connection => {
             await connect();
