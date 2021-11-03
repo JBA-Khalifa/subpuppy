@@ -2,7 +2,7 @@ import {getRepository} from "typeorm";
 import {NextFunction, Request, Response} from "express";
 import {Blocks} from "../entity/Blocks";
 import { getBlockTimestamp } from "../chain/net";
-import { parseBlock, parseBlocks } from "./services/parse";
+import { nullObject, parseBlock, parseBlocks } from "./services/parse";
 
 export class BlocksController {
 
@@ -22,10 +22,10 @@ export class BlocksController {
         const row = req.row;
         const page = req.page;
 
-        if(page === undefined || row === undefined) return null;
+        if(page === undefined || row === undefined) return nullObject;
         const sql = `select * from blocks order by block_num desc limit ${page}, ${row}`;
         const result: Array<Blocks> = await this.blocksRepository.query(sql);
-        if(result.length === 0) return null;
+        if(result.length === 0) return nullObject;
         else return parseBlocks(result);
     }
 
@@ -36,7 +36,7 @@ export class BlocksController {
 
         const sql = `select * from blocks where block_num = '${block_num}' or hash = '${block_hash}' limit 1`;
         const result: Array<Blocks> = await this.blocksRepository.query(sql);
-        if(result.length === 0) return null;
+        if(result.length === 0) return nullObject;
         else return parseBlock(result[0]);
     }
 
@@ -46,7 +46,7 @@ export class BlocksController {
         const row = req.row;
         const page = req.page;
 
-        if(key === undefined || row === undefined || page === undefined) return null;
+        if(key === undefined || row === undefined || page === undefined) return nullObject;
 
         // Search block
         let r: Request = request;

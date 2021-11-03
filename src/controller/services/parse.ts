@@ -168,21 +168,29 @@ export function parseBlocks(data: Array<Blocks>) {
 
 export function parseBlock(block: Blocks) {
 	// TODO
-	return null;
+	return nullObject;
 }
 
 export function parseExtrinsic(extrinsic: Extrinsics) {
 	// TODO
-	return null;
+	return nullObject;
 }
 
 export function parseEvents(events: Array<Events>) {
 	// TODO
-	return null;
+	return nullObject;
 }
 
 export function parseEvent(event: Events) {
 	// TODO
-	return null;
+	return nullObject;
 }
 
+export const nullObject = {
+	code: 0,
+	message: "Success",
+	generated_at: Math.round((new Date()).getTime() / 1000),
+	data: {
+		count: 0,
+	},
+};

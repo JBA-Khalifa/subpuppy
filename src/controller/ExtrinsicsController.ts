@@ -1,7 +1,7 @@
 import {getRepository} from "typeorm";
 import {NextFunction, Request, Response} from "express";
 import {Extrinsics} from "../entity/Extrinsics";
-import { parseExtrinsic, parseExtrinsics, parseTransfersData } from "./services/parse";
+import { nullObject, parseExtrinsic, parseExtrinsics, parseTransfersData } from "./services/parse";
 import { keySort } from "./services/db";
 
 export class ExtrinsicsController {
@@ -16,7 +16,7 @@ export class ExtrinsicsController {
         const from_block = req.from_block;
         const to_block = req.to_block;
 
-        if(page === undefined || row === undefined) return null;
+        if(page === undefined || row === undefined) return nullObject;
         
         // out
         let where = address !== undefined ? `and account_id = '${address}'` : '';
@@ -31,7 +31,7 @@ export class ExtrinsicsController {
         sql = `select * from extrinsics where call_module = 'balances' ${where} ${fromBlock} ${toBlock} order by block_num desc limit ${page}, ${row};`;
         console.log(sql);
         const inn: Array<Extrinsics> = await this.extrinsicsRepository.query(sql);
-        if(out.length === 0 && inn.length === 0) return null;
+        if(out.length === 0 && inn.length === 0) return nullObject;
         else {
             const ttl:Array<Extrinsics> = out.concat(inn);
             return parseTransfersData(ttl.sort(keySort('block_num', true)));
@@ -48,7 +48,7 @@ export class ExtrinsicsController {
         const call = req.call;
         const block_num = req.block_num;
 
-        if(page === undefined || row === undefined) return null;
+        if(page === undefined || row === undefined) return nullObject;
 
         const where_address = address !== undefined ? `and account_id = '${address}'` : '';
         const where_signed = signed !== undefined ? `and is_signed = ${signed}` : '';
@@ -56,10 +56,10 @@ export class ExtrinsicsController {
         const where_call = call !== undefined ? `and call_module_function = '${call}'` : '';
         const where_block_num = block_num !== undefined ? `and block_num = ${block_num}` : '';
 
-        const sql = `select * from extrinsics where call_module = 'staking' ${where_address} ${where_signed} ${where_module} ${where_call} ${where_block_num} order by block_num desc limit ${page}, ${row}`;
+        const sql = `select * from extrinsics where true ${where_address} ${where_signed} ${where_module} ${where_call} ${where_block_num} order by block_num desc limit ${page}, ${row}`;
         console.log(sql);
         const result: Array<Extrinsics> = await this.extrinsicsRepository.query(sql);
-        if(result.length === 0) return null;
+        if(result.length === 0) return nullObject;
         else return parseExtrinsics(result);
     }
 
@@ -71,7 +71,7 @@ export class ExtrinsicsController {
 
         const sql = `select * from extrinsics where extrinsic_index = '${extrinsic_index}' or extrinsic_hash = '${hash}' order by block_num desc`;
         const result: Array<Extrinsics> = await this.extrinsicsRepository.query(sql);
-        if(result.length === 0) return null;
+        if(result.length === 0) return nullObject;
         else return parseExtrinsic(result[0]);
     }
 
