@@ -44,7 +44,7 @@ export const Routes = [
     controller: EventsController,
     action: "getStakingHistory"
 }, {
-    method: "post",
+    method: "get",
     route: "/api/scan/block_height",
     controller: BlocksController,
     action: "getBlockHeight"
