@@ -2,6 +2,7 @@ import { Repository } from "typeorm";
 import { Blocks } from "../../entity/Blocks";
 import { Events } from "../../entity/Events";
 import { Extrinsics } from "../../entity/Extrinsics";
+import { Point } from "../../entity/Point";
 import { EventModule, getEventModule } from "../types/EventModule";
 import { getBlockTimestamp } from "./db";
 
@@ -194,3 +195,27 @@ export const nullObject = {
 		count: 0,
 	},
 };
+
+export function parsePoint(data: Array<Point>) {
+	let points = [];
+	for(let i = 0; i < data.length; i++) {
+		const point: Point = data[i];
+		points.push({
+			validator: point.validator,
+			point: point.point,
+			era: point.era,
+			ratio: point.ratio / 1000000,
+			timestamp: point.timestamp
+		})
+	}
+
+	return {
+		code: 0,
+		message: "Success",
+		generated_at: Math.round((new Date()).getTime() / 1000),
+		data: {
+			count: points.length,
+			points
+		}
+	}	
+}
