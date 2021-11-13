@@ -3,7 +3,7 @@ import {NextFunction, Request, Response} from "express";
 import {Point} from "../entity/Point";
 import { nullObject, parsePoint } from "./services/parse";
 
-export class ExtrinsicsController {
+export class PointController {
 
     private poinRepository = getRepository(Point);
     
@@ -15,10 +15,9 @@ export class ExtrinsicsController {
 
         if(validator === undefined || era_from === undefined || era_to === undefined || era_from > era_to) return nullObject;
 
-        return "Hello";
-        // const sql = `select * from point where validator = '${validator}' and era >= ${era_from} and era <= ${era_to} order by timestamp`;
-        // const result: Array<Point> = await this.poinRepository.query(sql);
-        // if(result.length === 0) return nullObject;
-        // else return parsePoint(result);
+        const sql = `select * from point where validator = '${validator}' and era >= ${era_from} and era <= ${era_to} order by timestamp`;
+        const result: Array<Point> = await this.poinRepository.query(sql);
+        if(result.length === 0) return nullObject;
+        else return parsePoint(result);
     }
 }

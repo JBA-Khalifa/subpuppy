@@ -1,6 +1,7 @@
 import {BlocksController} from "./controller/BlocksController";
 import {EventsController} from "./controller/EventsController";
 import {ExtrinsicsController} from "./controller/ExtrinsicsController";
+import { PointController } from "./controller/PointController";
 
 export const Routes = [
 {
@@ -51,7 +52,7 @@ export const Routes = [
 }, {
     method: "post",
     route: "/api/scan/points",
-    controller: BlocksController,
+    controller: PointController,
     action: "getPoints"
 }
 ];
