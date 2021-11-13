@@ -1,7 +1,7 @@
 import {getRepository} from "typeorm";
 import {NextFunction, Request, Response} from "express";
 import {Blocks} from "../entity/Blocks";
-import { getBlockTimestamp } from "../chain/net";
+import { getBlockTimestamp, getLastestHeight } from "../chain/net";
 import { nullObject, parseBlock, parseBlocks } from "./services/parse";
 
 export class BlocksController {
@@ -17,6 +17,9 @@ export class BlocksController {
         }
     }
 
+    /**
+     * Get blocks data from database
+     */
     async getBlocks(request: Request, response: Response, next: NextFunction) {
         const req = request.body;
         const row = req.row;
@@ -27,6 +30,25 @@ export class BlocksController {
         const result: Array<Blocks> = await this.blocksRepository.query(sql);
         if(result.length === 0) return nullObject;
         else return parseBlocks(result);
+    }
+
+    /** 
+     * Get block latest height from chain and latest height from database
+    */
+    async getBlockHeight(request: Request, response: Response, next: NextFunction) {
+        const sql = `select * from blocks order by block_num desc limit 1`;
+        const result: Array<Blocks> = await this.blocksRepository.query(sql);
+        const chain_height = await getLastestHeight();
+        return {
+            code: 0,
+            message: "Success",
+            generated_at: Math.round((new Date()).getTime() / 1000),
+            data: {
+                chain_height,
+                db_height: result[0].block_num,
+                diff: chain_height - result[0].block_num,
+            }
+        }
     }
 
     async getBlock(request: Request, response: Response, next: NextFunction) {
