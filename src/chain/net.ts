@@ -171,9 +171,7 @@ export async function saveValidatorPoint(connection: Connection): Promise<boolea
         ratio: Math.round(parseInt(v.toString()) / parseInt(total.toString()) * 1000000),
         timestamp
       }
-      console.log(pointData);
       const re = await saveValidatorPointDB(pointData, connection);
-      console.log("Save ok");
       return re;
     })
   } catch (err) {

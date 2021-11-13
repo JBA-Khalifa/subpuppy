@@ -15,9 +15,10 @@ export class ExtrinsicsController {
 
         if(validator === undefined || era_from === undefined || era_to === undefined || era_from > era_to) return nullObject;
 
-        const sql = `select * from point where validator = '${validator}' and era >= ${era_from} and era <= ${era_to} order by timestamp`;
-        const result: Array<Point> = await this.poinRepository.query(sql);
-        if(result.length === 0) return nullObject;
-        else return parsePoint(result);
+        return "Hello";
+        // const sql = `select * from point where validator = '${validator}' and era >= ${era_from} and era <= ${era_to} order by timestamp`;
+        // const result: Array<Point> = await this.poinRepository.query(sql);
+        // if(result.length === 0) return nullObject;
+        // else return parsePoint(result);
     }
 }
