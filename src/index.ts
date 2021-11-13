@@ -5,7 +5,7 @@ import * as express from "express";
 import * as bodyParser from "body-parser";
 import { Request, Response } from "express";
 import { Routes } from "./routes";
-import { connect, getLastestHeight } from './chain/net';
+import { connect, getLastestHeight, saveValidatorPoint } from './chain/net';
 import { logger } from "./logger";
 import { program } from "commander";
 import { exit } from "process";
@@ -19,6 +19,7 @@ let fetchingData = false;
 /** Commanders: 
  *  fetch: start fetching service
  *  api:   start api service, no options
+ *  point: saving validator point data
  *  
  *  options: 
  *  -f: from block height
@@ -73,6 +74,23 @@ program
             }
         }).catch(error => logger.error(error));
     })
+
+program
+    .command('points [options]')
+    .description('Saving validator point data')
+    .option('-i --interval <interval>', 'interval seconds every fetching', '1800')
+    .action((name, options, command) => {
+        createConnection().then(async connection => {
+            await connect();
+            const interval = options.interval;
+            setInterval(async() => {
+                console.log("saveValidatorPoint");
+                await saveValidatorPoint(connection);
+            }, parseInt(interval) * 1000);
+        })
+
+    })
+
 
 program
     .command('api [options]')

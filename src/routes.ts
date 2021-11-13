@@ -48,5 +48,10 @@ export const Routes = [
     route: "/api/scan/block_height",
     controller: BlocksController,
     action: "getBlockHeight"
+}, {
+    method: "post",
+    route: "/api/scan/points",
+    controller: BlocksController,
+    action: "getPoints"
 }
 ];

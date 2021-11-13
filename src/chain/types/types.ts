@@ -145,6 +145,14 @@ export class ChainData {
   events: Array<SubEvent>;
 }
 
+export class PointData {
+  validator: string;
+  point: number;
+  era: number;
+  ratio: number;
+  timestamp: number;
+}
+
 export class Transfer {
   module?: string;
   method?: string;

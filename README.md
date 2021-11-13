@@ -60,6 +60,12 @@ yarn start api -p 3000
 ```
 Default port is `3000`
 
+### Fetch and save validators' point data
+```
+yarn start points -i 1800
+```
+Save point data every 1800 seconds.
+
 
 ## 5. Use pm2
 ### Fetch to the latest block

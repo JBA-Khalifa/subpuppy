@@ -1,12 +1,14 @@
 import { ApiPromise, WsProvider } from '@polkadot/api';
 import { definitions } from './types/xxnetwork';
 
-import { Block, BlockHash, BlockNumber, EventRecord, SignedBlock } from '@polkadot/types/interfaces';
-import { SubBlock, SubEvent, SubExtrinsic } from './types/types';
-import { GenericExtrinsic, Vec } from '@polkadot/types';
+import { AccountId, Block, BlockHash, BlockNumber, EraIndex, EraRewardPoints, EventRecord, RewardPoint, SignedBlock } from '@polkadot/types/interfaces';
+import { PointData, SubBlock, SubEvent, SubExtrinsic } from './types/types';
+import { BTreeMap, GenericExtrinsic, Option, Vec } from '@polkadot/types';
 import { AnyTuple } from '@polkadot/types/types';
 import { types } from '@acala-network/type-definitions';
 import { logger } from '../logger';
+import { Connection } from 'typeorm';
+import { saveValidatorPointDB } from '../controller/services/db';
 
 export let api: ApiPromise;
 const wss = 'wss://protonet.xxlabs.net';
@@ -153,3 +155,31 @@ function Uint8ArrayToString(array: Uint8Array): string {
   return dataString;
 }
 
+export async function saveValidatorPoint(connection: Connection): Promise<boolean> {
+  const timestamp = Math.round((new Date()).getTime() / 1000);
+  try {
+    const currentEra: Option<EraIndex> = await api.query.staking.currentEra();
+    const points: EraRewardPoints = await api.query.staking.erasRewardPoints(parseInt(currentEra.toString()));
+    const individual: BTreeMap<AccountId, RewardPoint> = points.individual;
+    const total: RewardPoint = points.total;  
+
+    individual.forEach(async function(v, k) {
+      const pointData: PointData = {
+        validator: k.toString(),
+        point: parseInt(v.toString()),
+        era: parseInt(currentEra.toString()),
+        ratio: Math.round(parseInt(v.toString()) / parseInt(total.toString()) * 1000000),
+        timestamp
+      }
+      console.log(pointData);
+      const re = await saveValidatorPointDB(pointData, connection);
+      console.log("Save ok");
+      return re;
+    })
+  } catch (err) {
+		logger.error(`ERROR saveValidatorPoint ${err.message}`);
+    return false;
+  }
+
+
+}

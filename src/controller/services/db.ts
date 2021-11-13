@@ -1,10 +1,11 @@
 import { BlockHash } from '@polkadot/types/interfaces';
 import { Connection, Repository } from 'typeorm';
 import { fetchBlocks, fetchEvents, fetchExtrinsics, getBlockHash } from '../../chain/net';
-import { ChainData, SubBlock, SubEvent, SubExtrinsic } from '../../chain/types/types';
+import { ChainData, PointData, SubBlock, SubEvent, SubExtrinsic } from '../../chain/types/types';
 import { Blocks } from '../../entity/Blocks';
 import { Events } from '../../entity/Events';
 import { Extrinsics } from '../../entity/Extrinsics';
+import { Point } from '../../entity/Point';
 import { logger } from '../../logger';
 
 export async function getBlockTimestamp(repo: Repository<Events>, height: number): Promise<number> {
@@ -105,5 +106,15 @@ export function keySort(key: string | number,sortType: boolean) {
 		else {
 				return 0;
 		}
+	}
+}
+
+export async function saveValidatorPointDB(pointData: PointData, conn: Connection): Promise<boolean> {
+	try {
+		await conn.manager.save(conn.manager.create(Point, pointData));
+		return true;
+	} catch (err) {
+		logger.error(`ERROR Saving point data of #${pointData.validator} ${err.message}`);
+		return false;
 	}
 }
