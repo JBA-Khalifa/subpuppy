@@ -102,7 +102,7 @@ program
         createConnection().then(async connection => {
             const app = express();
             app.use(bodyParser.json());
-            setCors(app);     
+            setCors(app);
             await connect();
 
             Routes.forEach(route => {
