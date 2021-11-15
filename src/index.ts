@@ -105,7 +105,11 @@ program
 
             app.use(bodyParser.json());
             app.use(cors({
-                origin:['http://localhost:3000', 'http://tool.xxnetwork.asia'],
+                origin:[
+                    'http://localhost:3000', 
+                    'http://tool.xxnetwork.asia', 
+                    'https://tool.xxnetwork.asia'
+                ],
                 methods:['GET','POST'],
                 alloweHeaders:['Content-Type','Authorization']
             }))            
