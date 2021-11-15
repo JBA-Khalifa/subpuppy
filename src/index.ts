@@ -104,15 +104,16 @@ program
             app.use(bodyParser.json());
 
             const cors = require('cors');
-            app.use(cors({
-                // origin:[
-                //     'http://localhost:3000', 
-                //     'http://tool.xxnetwork.asia', 
-                //     'https://tool.xxnetwork.asia',
-                // ],
-                methods:['GET','POST'],
-                // alloweHeaders:['Content-Type','Authorization']
-            }))            
+            app.use(cors());
+            // app.use(cors({
+            //     origin:[
+            //         'http://localhost:3000', 
+            //         'http://tool.xxnetwork.asia', 
+            //         'https://tool.xxnetwork.asia',
+            //     ],
+            //     methods:['GET','POST'],
+            //     alloweHeaders:['Content-Type','Authorization']
+            // }))            
             await connect();
 
             Routes.forEach(route => {
