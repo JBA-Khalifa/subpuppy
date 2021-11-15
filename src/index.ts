@@ -154,24 +154,25 @@ function setCors(app) {
     const cors = require('cors');
     // app.use(cors());
     app.use(cors({
-        origin: function(ctx) {
-          const whiteList = [
-            'http://localhost:3000',
-            'http://127.0.0.1:3000',
-            'http://tool.xxnetwork.asia',
-            'https://tool.xxnetwork.asia',
-          ];
-          try {
-            let url = ctx.header.referer.substr(0,ctx.header.referer.length - 1);
-            if(whiteList.includes(url)) {
-                console.log("==== 1 ", url);
-                return url;
-            }
-          } catch (e) {
-                console.log('==== 2 http://tool.xxnetwork.asia');
-                return 'http://tool.xxnetwork.asia' //默认允许本地请求3000端口可跨域
-          }
-        },
+        // origin: function(ctx) {
+        //   const whiteList = [
+        //     'http://localhost:3000',
+        //     'http://127.0.0.1:3000',
+        //     'http://tool.xxnetwork.asia',
+        //     'https://tool.xxnetwork.asia',
+        //   ];
+        //   try {
+        //     let url = ctx.header.referer.substr(0,ctx.header.referer.length - 1);
+        //     if(whiteList.includes(url)) {
+        //         console.log("==== 1 ", url);
+        //         return url;
+        //     }
+        //   } catch (e) {
+        //         console.log('==== 2 http://tool.xxnetwork.asia');
+        //         return 'http://tool.xxnetwork.asia' //默认允许本地请求3000端口可跨域
+        //   }
+        // },
+        origin: 'https://tool.xxnetwork.asia',
         maxAge: 5,
         credentials: true,
         allowMethods: ['GET', 'POST'],
