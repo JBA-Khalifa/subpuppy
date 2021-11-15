@@ -168,8 +168,8 @@ function setCors(app) {
                 return url;
             }
           } catch (e) {
-              console.log('==== 2 http://localhost:3000');
-                return 'http://localhost:3000' //默认允许本地请求3000端口可跨域
+                console.log('==== 2 http://tool.xxnetwork.asia');
+                return 'http://tool.xxnetwork.asia' //默认允许本地请求3000端口可跨域
           }
         },
         maxAge: 5,
@@ -177,6 +177,7 @@ function setCors(app) {
         allowMethods: ['GET', 'POST'],
         allowHeaders: ['Content-Type', 'Authorization', 'Accept'],
         exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
+        
       })
     )
 }
