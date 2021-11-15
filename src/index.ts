@@ -172,7 +172,7 @@ function setCors(app) {
         //         return 'http://tool.xxnetwork.asia' //默认允许本地请求3000端口可跨域
         //   }
         // },
-        origin: 'https://tool.xxnetwork.asia',
+        origin: 'http://tool.xxnetwork.asia',
         maxAge: 5,
         credentials: true,
         allowMethods: ['GET', 'POST'],
