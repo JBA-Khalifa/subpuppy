@@ -171,7 +171,7 @@ function setCors(app) {
         //   }
         // },
         maxAge: 5,
-        credentials: false,
+        credentials: true,
         allowMethods: ['GET', 'POST'],
         allowHeaders: ['Content-Type', 'Authorization', 'Accept'],
         exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
