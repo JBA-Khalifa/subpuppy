@@ -153,9 +153,8 @@ program.parse(process.argv);
 
 function setCors(app) {
     const cors = require('cors');
-    // app.use(cors());
     app.use(cors({
-        origin: !debug ? 'http://tool.xxnetwork.asia' : 'http://localhost:3000',
+        origin: !debug ? 'http://tool.xxnetwork.asia' : 'http://127.0.0.1:3000',
         maxAge: 5,
         credentials: true,
         allowMethods: ['GET', 'POST'],
