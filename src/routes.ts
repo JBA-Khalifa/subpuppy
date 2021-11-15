@@ -56,14 +56,3 @@ export const Routes = [
     action: "getPoints"
 }
 ];
-
-/*
-curl -X POST 'http://101.32.192.132:3030/api/scan/points' \
---header 'Content-Type: application/json' \
---header 'X-API-Key: YOUR_KEY' \
---data-raw '{
-    "validator": "5C7XRXA2fYjvdrApJKbMripPEVLuTf3uuCLs1njGGt5UXJjB",
-    "era_from": 966,
-    "era_to": 966
-}'
-*/
