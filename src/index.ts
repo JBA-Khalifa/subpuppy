@@ -101,7 +101,14 @@ program
         // create express app
         createConnection().then(async connection => {
             const app = express();
+            const cors = require('cors');
+
             app.use(bodyParser.json());
+            app.use(cors({
+                origin:['http://localhost:3000', 'http://tool.xxnetwork.asia'],
+                methods:['GET','POST'],
+                alloweHeaders:['Content-Type','Authorization']
+            }))            
             await connect();
 
             Routes.forEach(route => {
