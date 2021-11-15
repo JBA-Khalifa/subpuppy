@@ -9,10 +9,9 @@ import { types } from '@acala-network/type-definitions';
 import { logger } from '../logger';
 import { Connection } from 'typeorm';
 import { saveValidatorPointDB } from '../controller/services/db';
+import { wss } from '../config';
 
 export let api: ApiPromise;
-const wss = 'wss://protonet.xxlabs.net';
-// const wss = 'wss://kusama-rpc.polkadot.io';
 
 export async function connect() {
   const provider = new WsProvider(wss);
